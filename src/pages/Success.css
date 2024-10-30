@@ -1,0 +1,53 @@
+.successContainer {
+}
+
+.successCard:nth-child(odd) {
+  --r: 1em; /* the radius */
+  --t: 1.5em; /* the size of the tail */
+  display: flex;
+  flex-direction: column;
+
+  max-width: 60%;
+  padding: 1em;
+  border-inline: var(--t) solid #0000;
+  border-radius: calc(var(--r) + var(--t)) / var(--r);
+  mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%)
+      var(--_p) 100% / var(--t) var(--t) no-repeat,
+    linear-gradient(#000 0 0) padding-box;
+
+  color: white;
+  --_p: 100%;
+  border-bottom-right-radius: 0 0;
+
+  width: fit-content;
+  background-color: rgb(69, 65, 65);
+  align-self: "flex-end";
+}
+.successCard:nth-child(even) {
+  --r: 1em; /* the radius */
+  --t: 1.5em; /* the size of the tail */
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  max-width: 60%;
+  padding: 1em;
+  border-inline: var(--t) solid #0000;
+  border-radius: calc(var(--r) + var(--t)) / var(--r);
+  mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%)
+      var(--_p) 100% / var(--t) var(--t) no-repeat,
+    linear-gradient(#000 0 0) padding-box;
+  /* background: linear-gradient(135deg, #fe6d00, #1384c5) border-box;
+      background: linear-gradient(to top, #0ba360 0%, #3cba92 100%); */
+
+  color: white;
+  --_p: 0;
+  border-bottom-left-radius: 0 0;
+
+  background-color: rgb(69, 65, 65);
+}
+.carousel {
+  display: flex;
+  justify-content: space-around;
+  align-items: stretch;
+  margin: 2% auto;
+}

@@ -1,0 +1,42 @@
+import { Box, Grid } from "@mui/material";
+import Hero from "./Home/Hero";
+import MainSection from "./Home/MainSection";
+import Heading from "./Home/Heading";
+import Introduction from "./Home/Introduction";
+import Testimonial from "./Home/Testimonial";
+import WhyChoose from "./Home/WhyChoose";
+import CountSection from "./Home/CountSection";
+
+const Home = () => {
+  return (
+    <Grid container>
+      <Grid item xs={12}>
+        <Hero />
+      </Grid>
+      <Grid item xs={12} margin={"5% auto"}>
+        <MainSection />
+      </Grid>
+      <Grid item xs={12} margin={"5% auto"}>
+        <Heading />
+      </Grid>
+      <Grid item xs={12} marginBottom={"5%"}>
+        <CountSection />
+      </Grid>
+      <Grid item xs={12} marginBottom={"5%"}>
+        <Introduction />
+      </Grid>
+
+      <Grid item xs={12} marginBottom={"5%"}>
+        <Testimonial />
+      </Grid>
+      <Grid item xs={12} marginBottom={"5%"}>
+        <WhyChoose />
+      </Grid>
+      {/* <Grid item xs={12}>
+        <Footer />
+      </Grid> */}
+    </Grid>
+  );
+};
+
+export default Home;

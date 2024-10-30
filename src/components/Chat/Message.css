@@ -1,0 +1,64 @@
+/* .sender {
+    /* background-color: green;
+    padding: 1rem;
+    color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: "center";
+    align-items: flex-end;
+    max-width: "60%";
+    width: fit-content;
+    align-self: flex-end;
+    position: absolute; */
+/* }  */
+.sender {
+  --r: 1em; /* the radius */
+  --t: 1.5em; /* the size of the tail */
+  display: flex;
+  flex-direction: column;
+
+  max-width: 60%;
+  padding: 1em;
+  border-inline: var(--t) solid #0000;
+  border-radius: calc(var(--r) + var(--t)) / var(--r);
+  mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%)
+      var(--_p) 100% / var(--t) var(--t) no-repeat,
+    linear-gradient(#000 0 0) padding-box;
+  /* background: linear-gradient(135deg, #fe6d00, #1384c5) border-box; */
+  /* background: linear-gradient(
+      179.1deg,
+      rgb(43, 170, 96) 2.3%,
+      rgb(129, 204, 104) 98.3%
+    ); */
+  /* background: linear-gradient(to top, #0ba360 0%, #3cba92 100%); */
+
+  color: black;
+  --_p: 100%;
+  border-bottom-right-radius: 0 0;
+  place-self: end;
+  width: fit-content;
+  background-color: rgb(210, 206, 206);
+}
+.reciver {
+  --r: 1em; /* the radius */
+  --t: 1.5em; /* the size of the tail */
+  width: fit-content;
+  display: flex;
+  flex-direction: column;
+  max-width: 60%;
+  padding: 1em;
+  border-inline: var(--t) solid #0000;
+  border-radius: calc(var(--r) + var(--t)) / var(--r);
+  mask: radial-gradient(100% 100% at var(--_p) 0, #0000 99%, #000 102%)
+      var(--_p) 100% / var(--t) var(--t) no-repeat,
+    linear-gradient(#000 0 0) padding-box;
+  /* background: linear-gradient(135deg, #fe6d00, #1384c5) border-box;
+    background: linear-gradient(to top, #0ba360 0%, #3cba92 100%); */
+
+  color: black;
+  --_p: 0;
+  border-bottom-left-radius: 0 0;
+  place-self: start;
+  background-color: rgb(204, 201, 201);
+  color: black;
+}
