@@ -3,40 +3,14 @@ import {
   Grid,
   Card,
   CardContent,
-  CardMedia,
   Typography,
   Box,
+  Avatar,
 } from "@mui/material";
-
-// Sample data for teachers
-const teachers = [
-  {
-    name: "Ms. Sonal Landge",
-    subject: "Mathematics",
-    bio: "Sonal has over 10 years of experience in teaching Algebra, Trigonometry, and Calculus.",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    name: "Mr. Sumit Landge",
-    subject: "Science",
-    bio: "Sumit specializes in Physics and Chemistry, inspiring students through practical experiments.",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    name: "Ms.Komal Tikone",
-    subject: "Social Studies",
-    bio: "Komal focuses on History and Political Science, making complex concepts easy to understand.",
-    image: "https://via.placeholder.com/150",
-  },
-  {
-    name: "Ms. Priya Singh",
-    subject: "English",
-    bio: "Priya has a passion for literature and language, helping students excel in writing and grammar.",
-    image: "https://via.placeholder.com/150",
-  },
-];
+import { useGetData } from "../../hooks/useGetData";
 
 const Teachers = () => {
+  const [data] = useGetData("api/v1/teacher/getAllTeachers");
   return (
     <Container>
       <Box sx={{ my: 4, textAlign: "center" }}>
@@ -49,22 +23,31 @@ const Teachers = () => {
         </Typography>
       </Box>
 
-      <Grid container spacing={4}>
-        {teachers.map((teacher, index) => (
-          <Grid item xs={12} sm={6} md={3} key={index}>
+      <Grid container justifyContent={"space-around"} spacing={"2rem"}>
+        {data?.teachers.map((teacher, index) => (
+          <Grid item xs={12} sm={6} md={3} key={index} textAlign={"center"}>
             <Card elevation={3}>
-              <CardMedia
-                component="img"
-                height="150"
-                image={teacher.image}
-                alt={`${teacher.name} photo`}
-              />
+              <Box
+                sx={{
+                  width: "100%",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  padding: "2rem",
+                }}
+              >
+                <Avatar
+                  src={teacher?.avatar?.url}
+                  sx={{ width: "7rem", height: "7rem" }}
+                />
+              </Box>
               <CardContent>
                 <Typography variant="h6" component="h2" gutterBottom>
                   {teacher.name}
                 </Typography>
                 <Typography variant="subtitle1" color="textSecondary">
-                  {teacher.subject}
+                  {teacher.subjects}
                 </Typography>
                 <Typography variant="body2" color="textSecondary" paragraph>
                   {teacher.bio}

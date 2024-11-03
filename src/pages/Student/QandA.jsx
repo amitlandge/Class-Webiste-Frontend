@@ -27,25 +27,25 @@ const QandA = () => {
   const { messages } = useSelector((state) => state.messages);
   const { user } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEle] = useState();
-  const grade = Number(enrollDetails?.grade);
+
   const [newMessages, setNewMessage] = useState([]);
   const bottomRef = useRef(null);
+  const course = enrollDetails?.course;
   const dispatch = useDispatch();
   const getIntialData = async () => {
     const res = await axios.get(
-      `http://localhost:4000/api/v1/message/getAllMessage?grade=${grade}`,
+      `http://localhost:4000/api/v1/message/getAllMessage?course=${course}`,
       { withCredentials: true }
     );
-    console.log(res?.data?.messages);
+
     dispatch(getAllMessages(res?.data?.messages));
-    // setOldMessages(res?.data?.messages);
+
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   };
   useEffect(() => {
     getIntialData();
-  }, [grade]);
+  }, [course]);
 
-  
   const openEmojiPicker = () => {
     dispatch(setEmojiPopUp(true));
   };
@@ -60,14 +60,14 @@ const QandA = () => {
   const sendMessageHandler = () => {
     const data = {
       message: message,
-      grade: enrollDetails?.grade,
+      course: enrollDetails?.course,
       sender: {
         userId: enrollDetails?.user._id,
         fName: enrollDetails?.firstName,
         lName: enrollDetails?.lastName,
       },
     };
-    console.log(data);
+
     socket.emit(NEW_MESSAGE, data);
     setMessage("");
   };
@@ -113,9 +113,7 @@ const QandA = () => {
       setNewMessage([]);
     }
   }, [deleteMessage, dispatch]);
-  const deleteNewMessageHandler = (id) => {
-    console.log(id);
-  };
+
   console.log(newMessages);
   const allMessages = [...messages, ...newMessages];
   return (
@@ -130,13 +128,11 @@ const QandA = () => {
         >
           <Suspense fallback={<p>Loading...</p>}>
             <Stack
-              // ref={chatContainerRef}
               className="chat-container"
               boxSizing={"border-box"}
               height={"72vh"}
               padding={"1rem"}
               spacing={"1rem"}
-              // bgcolor={chatBackground}
               sx={{
                 overflowX: "hidden",
                 overflowY: "auto !important",
@@ -148,7 +144,6 @@ const QandA = () => {
                   id={message._id}
                   message={message || []}
                   user={user}
-                  deleteMsg={deleteNewMessageHandler}
                 />
               ))}
               <div ref={bottomRef} />

@@ -7,7 +7,7 @@ import Table from "../Table/Table";
 import { useGetData } from "../../hooks/useGetData";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
 import DownloadButton from "../../UI/DownloadButton";
-import { useEffect } from "react";
+
 import moment from "moment";
 
 const downloadAssignments = (e) => {};
@@ -33,7 +33,7 @@ const AdminAssignment = () => {
       width: "150",
     },
     {
-      field: "grade",
+      field: "course",
       headerName: "Course",
       headerClassName: "table-heading",
       width: "150",

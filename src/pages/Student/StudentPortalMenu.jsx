@@ -1,4 +1,4 @@
-import { Box, MenuItem, MenuList } from "@mui/material";
+import { Box, MenuList } from "@mui/material";
 import { Link, useLocation } from "react-router-dom";
 
 const StudentPortalMenu = () => {
@@ -8,6 +8,8 @@ const StudentPortalMenu = () => {
     <Box
       sx={{
         display: "flex",
+
+        boxShadow: "0px 10px 10px rgba(0, 0, 0, 0.1)",
         justifyContent: "center",
         alignItems: "center",
       }}
@@ -15,64 +17,59 @@ const StudentPortalMenu = () => {
       <MenuList
         sx={{
           display: "flex",
-          flexDirection: "column",
+          // flexDirection: "column",
           gap: "2rem",
         }}
       >
-        <MenuItem
-          sx={
+        <Link
+          to={"/qAnda"}
+          style={
             location.pathname === "/qAnda"
               ? {
-                  background: "black",
-                  color: "whitesmoke",
-                  width: "max-content",
-                  padding: "1rem",
-                  borderRadius: "5px",
-                  ":hover": {
-                    color: "black",
-                  },
+                  background: "gray",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
                 }
               : {
-                  // background: "black",
-                  color: "black",
-                  width: "max-content",
-                  padding: "1rem",
-                  borderRadius: "5px",
-                  ":hover": {
-                    color: "black",
-                  },
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
                 }
           }
         >
-          <Link to={"/qAnda"}>Q and A</Link>
-        </MenuItem>
-        <MenuItem
-          sx={
+          Q And A Portal
+        </Link>
+
+        <Link
+          to={"/assignments"}
+          style={
             location.pathname === "/assignments"
               ? {
-                  background: "black",
-                  color: "whitesmoke",
-                  width: "max-content",
-                  padding: "1rem",
-                  borderRadius: "5px",
-                  ":hover": {
-                    color: "black",
-                  },
+                  background: "gray",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
                 }
               : {
-                  // background: "black",
-                  color: "black",
-                  width: "max-content",
-                  padding: "1rem",
-                  borderRadius: "5px",
-                  ":hover": {
-                    color: "black",
-                  },
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
                 }
           }
         >
-          <Link to={"/assignments"}>Assignments</Link>
-        </MenuItem>
+          Assignments
+        </Link>
       </MenuList>
     </Box>
   );

@@ -15,6 +15,9 @@ body {
   font-size: 1rem;
   box-sizing: border-box;
 }
-input {
-  -webkit-appearance: none;
+
+@media (max-width: 700px) {
+  * {
+    font-size: 0.8rem;
+  }
 }

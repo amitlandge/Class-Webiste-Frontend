@@ -1,4 +1,5 @@
 import { Box, Typography } from "@mui/material";
+import Count from "../../UI/Count";
 
 function CountSection() {
   return (
@@ -17,10 +18,9 @@ function CountSection() {
           variant="h2"
           sx={{
             fontWeight: "700",
-            fontSize: "4rem",
           }}
         >
-          130+
+          <Count count={130} duration={5} />
         </Typography>
         <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
           Students
@@ -34,7 +34,7 @@ function CountSection() {
             fontSize: "4rem",
           }}
         >
-          50+
+          <Count count={50} duration={5} />
         </Typography>
         <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
           Enrolled
@@ -48,7 +48,7 @@ function CountSection() {
             fontSize: "4rem",
           }}
         >
-          6+
+          <Count count={6} duration={5} />
         </Typography>
         <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
           Subjects

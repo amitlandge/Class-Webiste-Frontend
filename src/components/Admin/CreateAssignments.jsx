@@ -16,11 +16,13 @@ import { toast } from "react-toastify";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
+import { useCourseName } from "../../hooks/useCourseName";
+import AdminLayout from "./AdminLayout";
 
 const CreateAssignments = () => {
   const [title, setTitle] = useState("");
   const [note, setNote] = useState("");
-  const [grade, setGrade] = useState("");
+  const [course, setCourse] = useState("");
   const [file, setFile] = useState([]);
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
@@ -36,8 +38,9 @@ const CreateAssignments = () => {
   console.log(file);
   const [loader, putPostmethod] = usePostUpdate();
   const navigate = useNavigate();
+  const [data] = useCourseName();
   const addAssignmentsHandler = async () => {
-    if (!title && !note && !grade && !file) {
+    if (!title && !note && !course && !file) {
       toast.error("Please Fill All Information");
       return;
     }
@@ -45,7 +48,7 @@ const CreateAssignments = () => {
     let formData = new FormData();
     formData.append("title", title);
     formData.append("note", note);
-    formData.append("grade", grade);
+    formData.append("course", course);
 
     file.forEach((file) => {
       formData.append("images", file);
@@ -74,81 +77,84 @@ const CreateAssignments = () => {
       {loader ? (
         <Spinner />
       ) : (
-        <Container
-          sx={{
-            width: "70%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            alignItems: "center",
-            gap: "2rem",
-            margin: "2rem auto",
-          }}
-        >
-          <Typography variant="h4">Create Assignment</Typography>
-          <TextField
-            fullWidth
-            id="outlined-basic"
-            label="Title"
-            variant="outlined"
-            type="text"
-            onChange={(e) => {
-              setTitle(e.target.value);
+        <AdminLayout>
+          <Container
+            sx={{
+              width: "70%",
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "2rem",
+              margin: "2rem auto",
             }}
-            value={title}
-          />
-          <TextField
-            fullWidth
-            id="outlined-basic"
-            label="Note"
-            variant="outlined"
-            type="text"
-            onChange={(e) => {
-              setNote(e.target.value);
-            }}
-            value={note}
-          />
-          <FormControl fullWidth>
-            <InputLabel id="demo-simple-select-label">Grade</InputLabel>
-            <Select
-              labelId="demo-simple-select-label"
-              id="demo-simple-select"
-              value={grade}
-              label="Grade"
-              onChange={(e) => {
-                setGrade(e.target.value);
-              }}
-            >
-              <MenuItem value={"5"}>5th</MenuItem>
-              <MenuItem value={"6"}>6th</MenuItem>
-              <MenuItem value={"7"}>7th</MenuItem>
-              <MenuItem value={"8"}>8th</MenuItem>
-              <MenuItem value={"9"}>9th</MenuItem>
-              <MenuItem value={"10"}>10th</MenuItem>
-            </Select>
-          </FormControl>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<Cloud />}
           >
-            Upload files
-            <VisuallyHiddenInput
-              type="file"
-              onChange={(event) => setFile(Array.from(event.target.files))}
-              multiple
+            <Typography variant="h4">Create Assignment</Typography>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Title"
+              variant="outlined"
+              type="text"
+              onChange={(e) => {
+                setTitle(e.target.value);
+              }}
+              value={title}
             />
-          </Button>
-          {file.length >= 1 && (
-            <Typography>{file.length} Files Added</Typography>
-          )}
-          <MainButton
-            title={"+ Add Assignment"}
-            onclick={addAssignmentsHandler}
-          />
-        </Container>
+            <TextField
+              fullWidth
+              id="outlined-basic"
+              label="Note"
+              variant="outlined"
+              type="text"
+              onChange={(e) => {
+                setNote(e.target.value);
+              }}
+              value={note}
+            />
+            <FormControl fullWidth>
+              <InputLabel id="demo-simple-select-label">Course</InputLabel>
+              <Select
+                labelId="demo-simple-select-label"
+                id="demo-simple-select"
+                value={course}
+                label="Course"
+                onChange={(e) => {
+                  setCourse(e.target.value);
+                }}
+              >
+                {data?.courses.map((c, index) => {
+                  return (
+                    <MenuItem key={index} value={c}>
+                      {c}
+                    </MenuItem>
+                  );
+                })}
+              </Select>
+            </FormControl>
+            <Button
+              component="label"
+              role={undefined}
+              variant="contained"
+              tabIndex={-1}
+              startIcon={<Cloud />}
+            >
+              Upload files
+              <VisuallyHiddenInput
+                type="file"
+                onChange={(event) => setFile(Array.from(event.target.files))}
+                multiple
+              />
+            </Button>
+            {file.length >= 1 && (
+              <Typography>{file.length} Files Added</Typography>
+            )}
+            <MainButton
+              title={"+ Add Assignment"}
+              onclick={addAssignmentsHandler}
+            />
+          </Container>
+        </AdminLayout>
       )}
     </>
   );

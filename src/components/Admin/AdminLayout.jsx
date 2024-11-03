@@ -30,7 +30,6 @@ const AdminLayout = (prop) => {
           sm={12}
           sx={{
             display: {
-              // xs: "none",
               sm: "block",
             },
           }}

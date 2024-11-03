@@ -5,6 +5,7 @@ const theme = createTheme({
   typography: {
     fontFamily: "SUSE, sans-serif",
   },
+  body: {},
 });
 
 const AppThemeProvider = (prop) => {

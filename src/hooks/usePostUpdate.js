@@ -9,7 +9,7 @@ const usePostUpdate = () => {
   const postUpdate = async (data) => {
     try {
       setLoader(true);
-      console.log(server);
+     
       let res;
       if (data.method === "POST") {
         console.log(`${server}/${data.url}`);
@@ -43,7 +43,7 @@ const usePostUpdate = () => {
       return res;
     } catch (error) {
       setLoader(false);
-      console.log(error);
+      
       toast.error(error?.response?.data?.message || "Something went Wrong");
     }
   };

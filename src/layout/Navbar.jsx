@@ -14,13 +14,19 @@ import {
   Home,
   School,
   Info,
-  MenuBook,
   ExpandMore,
   ExpandLess,
-  BrowseGallery,
-  VerifiedUser,
   BackHand,
   ArrowRight,
+  GroupAdd,
+  AccountCircle,
+  AdminPanelSettings,
+  MoreVert,
+  Collections,
+  ThumbUp,
+  RecordVoiceOver,
+  Send,
+  Book,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -31,7 +37,8 @@ import axios from "axios";
 import { server } from "../constants/server";
 
 const Navbar = () => {
-  const { isLogin } = useSelector((state) => state.auth);
+  const { isLogin, user } = useSelector((state) => state.auth);
+  const { enrollDetails } = useSelector((state) => state.enroll);
   const navigate = useNavigate();
 
   const [openMoreLinks, setOpenMoreLinks] = useState(false);
@@ -83,38 +90,42 @@ const Navbar = () => {
                 Enroll
               </Link>
             </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <School />
-              </ListItemIcon>
+            {enrollDetails?.request === "Accepted" && (
+              <ListItemButton>
+                <ListItemIcon>
+                  <GroupAdd />
+                </ListItemIcon>
 
-              <Link to={"/qAnda"} onClick={oncloseMenubar}>
-                Student Portal
-              </Link>
-            </ListItemButton>
+                <Link to={"/qAnda"} onClick={oncloseMenubar}>
+                  Student Portal
+                </Link>
+              </ListItemButton>
+            )}
             <ListItemButton>
               <ListItemIcon>
-                <School />
+                <AccountCircle />
               </ListItemIcon>
 
               <Link to={"/profile"} onClick={oncloseMenubar}>
                 Profile
               </Link>
             </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <School />
-              </ListItemIcon>
+            {user.role === "ADMIN" && (
+              <ListItemButton>
+                <ListItemIcon>
+                  <AdminPanelSettings />
+                </ListItemIcon>
 
-              <Link to={"/admin/dashboard"} onClick={oncloseMenubar}>
-                Admin
-              </Link>
-            </ListItemButton>
+                <Link to={"/admin/dashboard"} onClick={oncloseMenubar}>
+                  Admin
+                </Link>
+              </ListItemButton>
+            )}
           </>
         )}
         <ListItemButton>
           <ListItemIcon>
-            <School />
+            <Book />
           </ListItemIcon>
           <Link to={"/courses"} onClick={oncloseMenubar}>
             Courses
@@ -123,7 +134,7 @@ const Navbar = () => {
 
         <ListItemButton onClick={handleMoreLinksToggle}>
           <ListItemIcon>
-            <Info />
+            <MoreVert />
           </ListItemIcon>
           <ListItemText primary="More" />
           {openMoreLinks ? <ExpandLess /> : <ExpandMore />}
@@ -133,7 +144,7 @@ const Navbar = () => {
           <List component="div" disablePadding>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
-                <BrowseGallery />
+                <Collections />
               </ListItemIcon>
 
               <Link to={"/gallery"} onClick={oncloseMenubar}>
@@ -143,7 +154,7 @@ const Navbar = () => {
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
-                <BrowseGallery />
+                <ThumbUp />
               </ListItemIcon>
 
               <Link to={"/success"} onClick={oncloseMenubar}>
@@ -152,7 +163,7 @@ const Navbar = () => {
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
-                <VerifiedUser />
+                <RecordVoiceOver />
               </ListItemIcon>
 
               <Link to={"/teachers"} onClick={oncloseMenubar}>
@@ -162,7 +173,7 @@ const Navbar = () => {
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
-                <MenuBook />
+                <Info />
               </ListItemIcon>
 
               <Link to={"/about"} onClick={oncloseMenubar}>
@@ -172,7 +183,7 @@ const Navbar = () => {
             </ListItemButton>
             <ListItemButton sx={{ pl: 4 }}>
               <ListItemIcon>
-                <MenuBook />
+                <Send />
               </ListItemIcon>
 
               <Link to={"/contact"} onClick={oncloseMenubar}>

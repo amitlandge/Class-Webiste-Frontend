@@ -34,6 +34,11 @@ const SidebarLinks = [
     name: "Courses",
     icon: <CastForEducation />,
   },
+  {
+    url: "/admin/teachers",
+    name: "Teachers",
+    icon: <CastForEducation />,
+  },
 ];
 
 const Sidebar = () => {

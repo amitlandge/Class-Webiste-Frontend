@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
+import AdminLayout from "./AdminLayout";
 
 const AddCourses = () => {
   const VisuallyHiddenInput = styled("input")({
@@ -65,116 +66,118 @@ const AddCourses = () => {
       {loader ? (
         <Spinner />
       ) : (
-        <Container
-          sx={{
-            padding: "2rem",
-          }}
-        >
-          <Typography variant="h4" align="center" gutterBottom>
-            Add Courses
-          </Typography>
-          <Grid
+        <AdminLayout>
+          <Container
             sx={{
-              display: "flex",
-              flexDirection: "column",
-              gap: "2rem",
-              width: "70vw",
-              margin: "0 auto",
+              padding: "2rem",
             }}
           >
-            <Grid item>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Title"
-                variant="outlined"
-                type="text"
-                onChange={(e) => {
-                  setTitle(e.target.value);
-                }}
-                value={title}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Subjects"
-                variant="outlined"
-                type="text"
-                onChange={(e) => {
-                  setSubjects(e.target.value);
-                }}
-                value={subjects}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Description"
-                variant="outlined"
-                type="text"
-                onChange={(e) => {
-                  setDescription(e.target.value);
-                }}
-                value={description}
-              />
-            </Grid>
-            <Grid item>
-              <TextField
-                fullWidth
-                id="outlined-basic"
-                label="Topics"
-                variant="outlined"
-                type="text"
-                onChange={(e) => {
-                  setTopic(e.target.value);
-                }}
-                value={topic}
-              />
-            </Grid>
-            <Grid item>
-              <Button
-                component="label"
-                role={undefined}
-                variant="contained"
-                tabIndex={-1}
-                startIcon={<Cloud />}
-              >
-                Upload files
-                <VisuallyHiddenInput
-                  type="file"
-                  accept="image/*"
-                  onChange={(event) => setFile(event.target.files[0])}
-                />
-              </Button>
-            </Grid>
-            {file && (
-              <Grid
-                item
-                sx={{
-                  width: "10rem",
-                  height: "10rem",
-                  border: "2px solid gray",
-                  //   objectFit: "cover",
-                }}
-              >
-                <img
-                  src={URL.createObjectURL(file)}
-                  alt="course-image"
-                  style={{
-                    width: "100%",
-                    height: "100%",
+            <Typography variant="h4" align="center" gutterBottom>
+              Add Courses
+            </Typography>
+            <Grid
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "2rem",
+                width: "70vw",
+                margin: "0 auto",
+              }}
+            >
+              <Grid item>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Title"
+                  variant="outlined"
+                  type="text"
+                  onChange={(e) => {
+                    setTitle(e.target.value);
                   }}
+                  value={title}
                 />
               </Grid>
-            )}
-            <Grid item>
-              <MainButton title={"Add Course"} onclick={addCourseHandler} />
+              <Grid item>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Subjects"
+                  variant="outlined"
+                  type="text"
+                  onChange={(e) => {
+                    setSubjects(e.target.value);
+                  }}
+                  value={subjects}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Description"
+                  variant="outlined"
+                  type="text"
+                  onChange={(e) => {
+                    setDescription(e.target.value);
+                  }}
+                  value={description}
+                />
+              </Grid>
+              <Grid item>
+                <TextField
+                  fullWidth
+                  id="outlined-basic"
+                  label="Topics"
+                  variant="outlined"
+                  type="text"
+                  onChange={(e) => {
+                    setTopic(e.target.value);
+                  }}
+                  value={topic}
+                />
+              </Grid>
+              <Grid item>
+                <Button
+                  component="label"
+                  role={undefined}
+                  variant="contained"
+                  tabIndex={-1}
+                  startIcon={<Cloud />}
+                >
+                  Upload files
+                  <VisuallyHiddenInput
+                    type="file"
+                    accept="image/*"
+                    onChange={(event) => setFile(event.target.files[0])}
+                  />
+                </Button>
+              </Grid>
+              {file && (
+                <Grid
+                  item
+                  sx={{
+                    width: "10rem",
+                    height: "10rem",
+                    border: "2px solid gray",
+                    //   objectFit: "cover",
+                  }}
+                >
+                  <img
+                    src={URL.createObjectURL(file)}
+                    alt="course-image"
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                    }}
+                  />
+                </Grid>
+              )}
+              <Grid item>
+                <MainButton title={"Add Course"} onclick={addCourseHandler} />
+              </Grid>
             </Grid>
-          </Grid>
-        </Container>
+          </Container>
+        </AdminLayout>
       )}
     </>
   );

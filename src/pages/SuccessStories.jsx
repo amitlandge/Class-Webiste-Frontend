@@ -7,7 +7,7 @@ const SuccessStories = () => {
       <Typography variant="h3" margin={"2% auto"} textAlign={"center"}>
         Success Stories
       </Typography>
-      <hr></hr>
+
       <Stack
         className={"successContainer"}
         sx={{

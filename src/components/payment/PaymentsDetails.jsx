@@ -2,6 +2,7 @@ import { Container } from "@mui/material";
 import { useGetData } from "../../hooks/useGetData";
 import { useEffect } from "react";
 import Table from "../Table/Table";
+import MainButton from "../../UI/MainButton";
 
 const PaymentsDetails = () => {
   const [data, getInitialData] = useGetData("api/v1/payment/getPaymentData");
@@ -52,8 +53,19 @@ const PaymentsDetails = () => {
     id: payment._id,
   }));
   return (
-    <Container>
+    <Container
+      sx={{
+        margin: "4% auto",
+
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "center",
+        alignItems: "center",
+        gap: "2rem",
+      }}
+    >
       <Table columns={column} heading={"All Payment"} rows={filterArray} />
+      <MainButton title={"Go Back"} url={"/profile"} />
     </Container>
   );
 };

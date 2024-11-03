@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Container,
   Card,
@@ -11,46 +10,16 @@ import { useGetData } from "../../hooks/useGetData";
 import MainButton from "../../UI/MainButton";
 
 const CourseDetails = () => {
-  const param = useParams(); // Extract course ID from URL params
+  const param = useParams(); 
   const [data] = useGetData(`api/v1/course/getCourseDetails/${param.cid}`);
   const course = data?.course;
-  console.log(course);
-  //   useEffect(() => {
-  //     // Fetch course details from backend
-  //     const fetchCourse = async () => {
-  //       try {
-  //         const response = await axios.get(`/api/courses/${courseId}`); // Replace with your backend endpoint
-  //         setCourse(response.data);
-  //       } catch (error) {
-  //         console.error("Error fetching course:", error);
-  //       } finally {
-  //         setLoading(false);
-  //       }
-  //     };
-
-  //     fetchCourse();
-  //   }, [courseId]);
-
-  //   if (loading) {
-  //     return (
-  //       <Container
-  //         sx={{
-  //           display: "flex",
-  //           justifyContent: "center",
-  //           alignItems: "center",
-  //           height: "100vh",
-  //         }}
-  //       >
-  //         <CircularProgress />
-  //       </Container>
-  //     );
-  //   }
-
+  
+ 
   if (!course) {
     return (
       <Container sx={{ textAlign: "center", marginTop: 4 }}>
         <Typography variant="h5">Course not found</Typography>
-        <MainButton title={"Go Back"} />
+        <MainButton title={"Go Back"} url={"/courses"} />
       </Container>
     );
   }

@@ -9,6 +9,7 @@ import { isAuthenticated, isNotAuthenticated } from "../redux/reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../UI/Spinner";
+import MainButton from "../UI/MainButton";
 const Login = () => {
   const [login, setIsLogin] = useState(false);
   const navigate = useNavigate();
@@ -122,7 +123,6 @@ const Login = () => {
                     gap: "2rem",
                     alignItems: "center",
                   }}
-                  onSubmit={onLoginHandler}
                 >
                   <TextField
                     type="username"
@@ -152,20 +152,7 @@ const Login = () => {
                   >
                     Password Must Be 8 Character
                   </span>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    sx={{
-                      background: "#006A4E",
-                      color: "white",
-                      ":hover": {
-                        background: "#006A4E",
-                        color: "white",
-                      },
-                    }}
-                  >
-                    Login
-                  </Button>
+                  <MainButton onclick={onLoginHandler} title={"Login"} />
                 </form>
               </>
             ) : (
@@ -178,57 +165,7 @@ const Login = () => {
                     gap: "2rem",
                     alignItems: "center",
                   }}
-                  onSubmit={onRegisterHandler}
                 >
-                  {/* <div> */}
-                  {/* <Avatar
-                  src={file ? URL.createObjectURL(file) : ""}
-                  sx={{ width: "10rem", height: "10rem" }}
-                ></Avatar>
-                <div style={{ position: "absolute", cursor: "pointer" }}>
-                  <CameraAltOutlined
-                    style={{
-                      cursor: "pointer",
-                    }}
-                  />
-                  <input
-                    type="file"
-                    accept="image/*"
-                    style={{
-                      position: "relative",
-                      top: "-10px",
-                      left: "-2rem",
-                      opacity: "0.0",
-                    }}
-                    onChange={(e) => {
-                      setFile(e.target.files[0]);
-                      console.log(e.target.files[0]);
-                    }}
-                  />
-                </div>
-              </div> */}
-                  {/* <TextField
-                type="text"
-                className="name"
-                label="Name"
-                variant="outlined"
-                style={{ width: "25rem" }}
-                onChange={(e) => {
-                  setName(e.target.value);
-                }}
-                value={name}
-              /> */}
-                  {/* <TextField
-                type="text"
-                className="bio"
-                label="Bio"
-                variant="outlined"
-                style={{ width: "25rem" }}
-                onChange={(e) => {
-                  setBio(e.target.value);
-                }}
-                value={bio}
-              /> */}
                   <TextField
                     type="text"
                     className="text"
@@ -271,20 +208,7 @@ const Login = () => {
                   >
                     Password Must Be 8 Character
                   </p>
-                  <Button
-                    variant="contained"
-                    type="submit"
-                    sx={{
-                      background: "#006A4E",
-                      color: "white",
-                      ":hover": {
-                        background: "#006A4E",
-                        color: "white",
-                      },
-                    }}
-                  >
-                    Register
-                  </Button>
+                  <MainButton onclick={onRegisterHandler} title={"Register"} />
                 </form>
               </>
             )}

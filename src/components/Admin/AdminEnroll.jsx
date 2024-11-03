@@ -35,8 +35,8 @@ const AdminEnroll = () => {
       width: "150",
     },
     {
-      field: "lastName",
-      headerName: "Lastname",
+      field: "course",
+      headerName: "Course",
       headerClassName: "table-heading",
       width: "150",
     },

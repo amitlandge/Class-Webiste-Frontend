@@ -10,7 +10,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { usePostUpdate } from "../hooks/usePostUpdate";
 import { useSelector } from "react-redux";
@@ -19,7 +19,7 @@ import MainButton from "../UI/MainButton";
 import Spinner from "../UI/Spinner";
 import { useCourseName } from "../hooks/useCourseName";
 
-const Enroll = () => {
+const EditEnroll = () => {
   const [file, setFile] = useState();
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
@@ -27,14 +27,15 @@ const Enroll = () => {
   const [address, setAddress] = useState("");
   const [phone, setPhone] = useState();
   const [age, setAge] = useState();
-  const [course, setCourse] = useState();
+
   const [gender, setGender] = useState("");
   const [loader, putPostmethod] = usePostUpdate();
-  const { user } = useSelector((state) => state.auth);
+  //   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [data] = useCourseName();
   console.log(data);
-  
+
+  const { enrollDetails } = useSelector((state) => state.enroll);
   const submitEnrollData = async () => {
     // e.preventDefault();
     const phoneNumber = toString(phone);
@@ -46,15 +47,7 @@ const Enroll = () => {
       toast.error("Age is Invalid");
       return;
     }
-    if (
-      !firstName &&
-      !middleName &&
-      !lastName &&
-      !address &&
-      !age &&
-      !course &&
-      !gender
-    ) {
+    if (!firstName && !middleName && !lastName && !address && !age && !gender) {
       toast.error("Please Fill All Information");
       return;
     } else {
@@ -64,14 +57,14 @@ const Enroll = () => {
       formData.append("lastName", lastName);
       formData.append("gender", gender);
       formData.append("age", age);
-      formData.append("course", course);
+      formData.append("_id", enrollDetails._id);
       formData.append("address", address);
       formData.append("phone", phone);
       formData.append("avatar", file);
-      formData.append("userId", user._id);
+      //   formData.append("userId", user._id);
       const data = {
-        method: "POST",
-        url: "api/v1/enroll",
+        method: "PUT",
+        url: "api/v1/enroll/update",
         payload: formData,
         message: "Enroll Request Successfully",
         headers: {
@@ -82,13 +75,22 @@ const Enroll = () => {
         const response = await putPostmethod(data);
         console.log(response);
         if (response?.status === 200) {
-          navigate("/home");
+          navigate("/profile");
         }
       } catch (error) {
         console.log(error);
       }
     }
   };
+  useEffect(() => {
+    setAge(enrollDetails.age);
+    setFirstName(enrollDetails.firstName);
+    setLastName(enrollDetails.lastName);
+    setAddress(enrollDetails.address);
+    setGender(enrollDetails.gender);
+    setPhone(enrollDetails.phone);
+    setMiddleName(enrollDetails.middleName);
+  }, []);
   return (
     <>
       {loader ? (
@@ -249,35 +251,13 @@ const Enroll = () => {
                   value={age}
                 />
               </Grid>
-              <Grid item xs={12} sm={6}>
-                <FormControl fullWidth>
-                  <InputLabel id="demo-simple-select-label">Course</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={course}
-                    label="Course"
-                    onChange={(e) => {
-                      setCourse(e.target.value);
-                    }}
-                  >
-                    {data?.courses.map((c, index) => {
-                      return (
-                        <MenuItem key={index} value={c}>
-                          {c}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
-                </FormControl>
-              </Grid>
             </Grid>
           </Container>
-          <MainButton onclick={submitEnrollData} title={"Request For Enroll"} />
+          <MainButton onclick={submitEnrollData} title={"Update Enroll"} />
         </div>
       )}
     </>
   );
 };
 
-export default Enroll;
+export default EditEnroll;

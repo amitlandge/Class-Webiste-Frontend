@@ -1,49 +1,93 @@
-import {
-  Container,
-  Stack,
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
-} from "@mui/material";
-import DownloadButton from "../../UI/DownloadButton";
-import StudentPortal from "./StudentPortal";
-import { useGetData } from "../../hooks/useGetData";
-import { useSelector } from "react-redux";
+import { Box, Button } from "@mui/material";
 
+import { Link } from "react-router-dom";
+
+import { useGetData } from "../../hooks/useGetData";
+
+import DownloadButton from "../../UI/DownloadButton";
+
+import moment from "moment";
+import { useSelector } from "react-redux";
+import StudentPortal from "./StudentPortal.jsx";
+import Table from "../../components/Table/Table.jsx";
+
+const downloadAssignments = (e) => {};
 const Assignments = () => {
+  const column = [
+    {
+      field: "title",
+      headerName: "Title",
+      headerClassName: "table-heading",
+      width: "150",
+    },
+    {
+      field: "note",
+      headerName: "Note",
+      headerClassName: "table-heading",
+      width: "250",
+    },
+    {
+      field: "course",
+      headerName: "Course",
+      headerClassName: "table-heading",
+      width: "150",
+    },
+    {
+      field: "updated",
+      headerName: "Updated",
+      headerClassName: "table-heading",
+      width: "150",
+    },
+
+    {
+      field: "actions",
+      flex: 0.3,
+      headerClassName: "table-heading",
+      headerName: "Actions",
+      minWidth: 150,
+      type: "number",
+      sortable: false,
+      renderCell: (params) => {
+        return (
+          <Box
+            sx={{
+              display: "flex",
+              justifyContent: "flex-end",
+              alignItems: "center",
+            }}
+          >
+            <Link>
+              <Button onClick={downloadAssignments}>
+                <DownloadButton id={params.id} />
+              </Button>
+            </Link>
+          </Box>
+        );
+      },
+    },
+  ];
+
+
   const { enrollDetails } = useSelector((state) => state.enroll);
-  const grade = enrollDetails?.grade;
-  const [data] = useGetData(`api/v1/course/assignment/course?course=${grade}`);
-  console.log(data);
+  const course = enrollDetails?.course;
+  console.log(course);
+  const [data] = useGetData(`api/v1/course/assignment/course?course=${course}`);
+  console.log(data?.assignments);
+
+  const filterArray = data?.assignment?.map((assignment) => ({
+    ...assignment,
+    id: assignment._id,
+    updated: moment(assignment?.createdAt).format("YYYY-MM-DD"),
+  }));
+  console.log(filterArray);
   return (
     <StudentPortal>
-      <Container sx={{ marginTop: 4 }}>
-        <Typography variant="h4" gutterBottom align="center">
-          All Assignments
-        </Typography>
-
-        <Stack spacing={3}>
-          {data?.assignment.map((assignment) => (
-            <Card key={assignment._id} variant="outlined">
-              <CardContent>
-                <Typography variant="h6" gutterBottom>
-                  {assignment.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  {assignment.note}
-                </Typography>
-                <Typography variant="subtitle2" color="textSecondary">
-                  Course: {assignment.grade}
-                </Typography>
-              </CardContent>
-              <CardActions sx={{ justifyContent: "flex-end" }}>
-                <DownloadButton id={assignment._id} />
-              </CardActions>
-            </Card>
-          ))}
-        </Stack>
-      </Container>
+      <Table
+        columns={column}
+        heading={"All Assignments"}
+        rows={filterArray}
+        height={"90vh"}
+      />
     </StudentPortal>
   );
 };

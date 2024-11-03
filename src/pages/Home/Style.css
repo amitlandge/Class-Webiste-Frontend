@@ -141,15 +141,7 @@
 }
 
 .box_container {
-  /* padding: "2rem",
-  display: "flex",
-  flexDirection: "column",
-  justifyContent: "center",
-  alignItems: "center",
-  background: "rgb(69,65,65)",
-  width: "max-content",
-  color: "white",
-  gap: "0.5rem", */
+  
   padding: 2rem;
   display: flex;
   flex-direction: column;

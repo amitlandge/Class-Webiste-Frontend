@@ -53,7 +53,7 @@ const FileToggle = (prop) => {
     formData.append("userId", enrollDetails?.user?._id);
     formData.append("fName", enrollDetails?.firstName);
     formData.append("lName", enrollDetails?.lastName);
-    formData.append("grade", enrollDetails?.grade);
+    formData.append("course", enrollDetails?.course);
     files.forEach((file) => formData.append("files", file));
 
     dispatch(setOpenAttachments(false));

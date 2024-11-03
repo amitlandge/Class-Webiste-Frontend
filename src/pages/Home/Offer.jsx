@@ -6,7 +6,7 @@ const Offer = () => {
       sx={{
         width: "85%",
         padding: "2rem",
-        // textTransform: "uppercase",
+        
         display: "flex",
         flexDirection: "column",
         gap: "1rem",
@@ -47,8 +47,7 @@ const Offer = () => {
           discussions, activities, and modern teaching tools that help students
           grasp concepts better.
         </li>
-        {/* <li>Social Studies</li>
-        <li>History</li> */}
+      
       </ul>
     </Paper>
   );

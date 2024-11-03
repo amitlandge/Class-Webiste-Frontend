@@ -1,18 +1,15 @@
 import styled from "@emotion/styled";
 import { Cloud } from "@mui/icons-material";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import MainButton from "../../UI/MainButton";
 import { toast } from "react-toastify";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
-import { useGetData } from "../../hooks/useGetData";
-import { useDispatch, useSelector } from "react-redux";
-import { setCourseDetails } from "../../redux/reducers/course";
 import AdminLayout from "./AdminLayout";
 
-const EditCourse = () => {
+const AddTeacher = () => {
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -24,41 +21,30 @@ const EditCourse = () => {
     whiteSpace: "nowrap",
     width: 1,
   });
-  const param = useParams();
-  const dispatch = useDispatch();
-  const [data, getInitialData] = useGetData(
-    `api/v1/course/getCourseDetails/${param.cid}`
-  );
-  useEffect(() => {
-    dispatch(setCourseDetails(data?.course));
-  }, [dispatch, data?.course]);
-  const { courseDetails } = useSelector((state) => state.course);
-  const [title, setTitle] = useState();
-  const [subjects, setSubjects] = useState();
-  const [description, setDescription] = useState();
-  const [topic, setTopic] = useState();
+  const [name, setName] = useState("");
+  const [subjects, setSubjects] = useState("");
+  const [bio, setBio] = useState("");
+
   const [file, setFile] = useState();
   const [loader, putPostmethod] = usePostUpdate();
   const navigate = useNavigate();
 
-  console.log(data?.course);
-  const addCourseHandler = async () => {
-    if (!title && !subjects && !description && !topic && !file) {
+  const addTeacherHandler = async () => {
+    if (!name && !subjects && !bio && !file) {
       toast.error("Please Fill All Information");
       return;
     }
     console.log(file);
     let formData = new FormData();
-    formData.append("title", title);
+    formData.append("name", name);
     formData.append("subjects", subjects);
-    formData.append("description", description);
-    formData.append("topic", topic);
-    formData.append("image", file);
+    formData.append("bio", bio);
+    formData.append("avatar", file);
     const data = {
-      method: "PUT",
-      url: `api/v1/course//update/${param.cid}`,
+      method: "POST",
+      url: "api/v1/teacher/add-teacher",
       payload: formData,
-      message: "Upadate Course Successfully",
+      message: "Add Teacher Successfully",
       headers: {
         "Content-Type": "multipart/form-data",
       },
@@ -67,24 +53,12 @@ const EditCourse = () => {
       const response = await putPostmethod(data);
       console.log(response);
       if (response?.status === 200) {
-        navigate("/admin/courses");
+        navigate("/admin/teachers");
       }
     } catch (error) {
       console.log(error);
     }
   };
-  useEffect(() => {
-    getInitialData();
-    if (courseDetails?._id !== param?.cid) {
-      getInitialData();
-    } else {
-      setTitle(courseDetails?.title);
-      setDescription(courseDetails?.description);
-      setTopic(courseDetails?.topic);
-      setSubjects(courseDetails?.subjects);
-    }
-  }, [courseDetails?._id, param?.cid]);
-  console.log(file);
   return (
     <>
       {loader ? (
@@ -97,7 +71,7 @@ const EditCourse = () => {
             }}
           >
             <Typography variant="h4" align="center" gutterBottom>
-              Edit Course
+              Add Teacher
             </Typography>
             <Grid
               sx={{
@@ -110,21 +84,23 @@ const EditCourse = () => {
             >
               <Grid item>
                 <TextField
-                  placeholder="Enter Your Course Title"
                   fullWidth
                   id="outlined-basic"
+                  label="Name"
+                  variant="outlined"
                   type="text"
                   onChange={(e) => {
-                    setTitle(e.target.value);
+                    setName(e.target.value);
                   }}
-                  value={title}
+                  value={name}
                 />
               </Grid>
               <Grid item>
                 <TextField
-                  placeholder="Enter Your Course Subjects"
                   fullWidth
                   id="outlined-basic"
+                  label="Subjects"
+                  variant="outlined"
                   type="text"
                   onChange={(e) => {
                     setSubjects(e.target.value);
@@ -134,28 +110,18 @@ const EditCourse = () => {
               </Grid>
               <Grid item>
                 <TextField
-                  placeholder="Enter Your Course Description"
                   fullWidth
                   id="outlined-basic"
+                  label="Bio"
+                  variant="outlined"
                   type="text"
                   onChange={(e) => {
-                    setDescription(e.target.value);
+                    setBio(e.target.value);
                   }}
-                  value={description}
+                  value={bio}
                 />
               </Grid>
-              <Grid item>
-                <TextField
-                  fullWidth
-                  placeholder="Enter Your Course Topics"
-                  id="outlined-basic"
-                  type="text"
-                  onChange={(e) => {
-                    setTopic(e.target.value);
-                  }}
-                  value={topic}
-                />
-              </Grid>
+
               <Grid item>
                 <Button
                   component="label"
@@ -164,7 +130,7 @@ const EditCourse = () => {
                   tabIndex={-1}
                   startIcon={<Cloud />}
                 >
-                  Upload New file
+                  Upload files
                   <VisuallyHiddenInput
                     type="file"
                     accept="image/*"
@@ -172,16 +138,15 @@ const EditCourse = () => {
                   />
                 </Button>
               </Grid>
-
-              <Grid
-                item
-                sx={{
-                  width: "10rem",
-                  height: "10rem",
-                  border: "2px solid gray",
-                }}
-              >
-                {file && (
+              {file && (
+                <Grid
+                  item
+                  sx={{
+                    width: "10rem",
+                    height: "10rem",
+                    border: "2px solid gray",
+                  }}
+                >
                   <img
                     src={URL.createObjectURL(file)}
                     alt="course-image"
@@ -190,11 +155,10 @@ const EditCourse = () => {
                       height: "100%",
                     }}
                   />
-                )}
-              </Grid>
-
+                </Grid>
+              )}
               <Grid item>
-                <MainButton title={"Add Course"} onclick={addCourseHandler} />
+                <MainButton title={"Add Teacher"} onclick={addTeacherHandler} />
               </Grid>
             </Grid>
           </Container>
@@ -204,4 +168,4 @@ const EditCourse = () => {
   );
 };
 
-export default EditCourse;
+export default AddTeacher;

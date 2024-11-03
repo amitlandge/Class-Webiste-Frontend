@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import feesAmount from "../../utils/feesAmount.js";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
@@ -22,8 +22,8 @@ const Payment = () => {
   }, 0);
   console.log(data);
   const { enrollDetails } = useSelector((state) => state.enroll);
-  console.log(enrollDetails?.grade);
-  const fees = feesAmount(enrollDetails?.grade);
+  
+  const fees = feesAmount(enrollDetails?.course);
   console.log(fees);
   const [amount, setAmount] = useState("");
   const [, putPostmethod] = usePostUpdate();
@@ -39,7 +39,7 @@ const Payment = () => {
         url: "api/v1/payment/razorpay",
         payload: {
           studentName: `${enrollDetails?.firstName} ${enrollDetails?.lastName}`,
-          className: enrollDetails?.grade,
+          course: enrollDetails?.course,
           amount,
         },
       };
@@ -61,7 +61,7 @@ const Payment = () => {
               paymentId: response.razorpay_payment_id,
               signature: response.razorpay_signature,
               studentName: `${enrollDetails?.firstName} ${enrollDetails?.lastName}`,
-              className: enrollDetails?.grade,
+              course: enrollDetails?.course,
               amount,
             },
             message: "Payment Successfully",

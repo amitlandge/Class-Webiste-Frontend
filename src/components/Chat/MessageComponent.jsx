@@ -25,7 +25,7 @@ const MessageComponent = (prop) => {
   // });
   const deleteMessageHandler = async () => {
     prop.deleteMsg(_id);
-    // const stringId = String(_id);
+   
     const data = {
       method: "DELETE",
       url: `api/v1/message/delete/${_id}`,
@@ -39,12 +39,7 @@ const MessageComponent = (prop) => {
   };
   return (
     <div className={sender?.userId === user?._id ? "sender" : "reciver"}>
-      {/* //   <animated.div */}
-      {/* //     style={{
-    //     //   ...spring,
-    //     }}
-    //     
-    //   > */}
+      
 
       <Box
         sx={{
@@ -89,23 +84,14 @@ const MessageComponent = (prop) => {
       >
         {message}
       </Typography>
-      {/* <Typography
-        variant="p"
-        sx={{
-          width: "fit-content",
-          display: "block",
-          alignSelf: sender?.userId === user?._id ? "flex-end" : "flex-start",
-        }}
-      >
-        {grade}th
-      </Typography> */}
+     
       <Typography
         variant="caption"
         color={"text.primary"}
         style={{
           alignSelf: "flex-end",
           display: "flex",
-          // gap: "5px",
+         
           alignItems: "center",
           marginTop: "5px",
         }}
@@ -126,7 +112,7 @@ const MessageComponent = (prop) => {
           </IconButton>
         )}
       </Typography>
-      {/* //   </animated.div> */}
+      
     </div>
   );
 };

@@ -6,14 +6,14 @@ const StudentPortal = (prop) => {
     <Box
       sx={{
         marginTop: "1rem",
-        // background: "skyblue",
+      
       }}
     >
-      <Grid container spacing={3} height={"85vh"}>
-        <Grid item xs={3}>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
           <StudentPortalMenu />
         </Grid>
-        <Grid item xs={9}>
+        <Grid item xs={12}>
           {prop.children}
         </Grid>
       </Grid>

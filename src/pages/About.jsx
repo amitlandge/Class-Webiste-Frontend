@@ -1,11 +1,11 @@
-import React from "react";
+
 import {
   Typography,
   Container,
   Grid,
   Card,
   CardContent,
-  Button,
+
   Box,
 } from "@mui/material";
 
@@ -33,7 +33,7 @@ const About = () => {
       </Box>
 
       <Grid container spacing={4}>
-        {/* Mission Section */}
+     
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardContent>
@@ -50,7 +50,7 @@ const About = () => {
           </Card>
         </Grid>
 
-        {/* Why Choose Us Section */}
+        
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardContent>
@@ -70,7 +70,7 @@ const About = () => {
           </Card>
         </Grid>
 
-        {/* Approach Section */}
+        
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardContent>
@@ -87,7 +87,7 @@ const About = () => {
           </Card>
         </Grid>
 
-        {/* Commitment Section */}
+        
         <Grid item xs={12} md={6}>
           <Card elevation={3}>
             <CardContent>
@@ -104,12 +104,7 @@ const About = () => {
         </Grid>
       </Grid>
 
-      {/* Call to Action */}
-      <Box sx={{ textAlign: "center", mt: 4 }}>
-        <Button variant="contained" color="primary" size="large">
-          Join Us Now
-        </Button>
-      </Box>
+   
     </Container>
   );
 };
