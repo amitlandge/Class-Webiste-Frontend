@@ -78,13 +78,13 @@ const StudentChart = () => {
   const [course] = useCourseName();
   const [count] = useGetData("api/v1/course/getCount");
   console.log(count);
-  // Sample data
+
   const data = {
-    labels: course?.courses, // Course or category names
+    labels: course?.courses,
     datasets: [
       {
         label: "Number of Students",
-        data: count?.courses, // Replace with actual data
+        data: count?.courses,
         backgroundColor: "rgba(75, 192, 192, 0.6)",
         borderColor: "rgba(75, 192, 192, 1)",
         borderWidth: 1,
@@ -109,7 +109,7 @@ const StudentChart = () => {
       },
       y: {
         beginAtZero: true,
-        max: 50, // Adjust based on data range
+        max: 50,
       },
     },
   };

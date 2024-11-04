@@ -54,7 +54,7 @@ const Sidebar = () => {
             width: "100%",
             fontSize: "2rem",
             letterSpacing: "4px",
-            // fontFamily: "Lobster, sans-serif",
+
             color: "gray",
             textAlign: "center",
             fontStyle: "italic",

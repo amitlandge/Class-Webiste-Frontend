@@ -30,7 +30,7 @@ const StudentDetails = () => {
   const param = useParams();
   const [data, getInitialData] = useGetData(`api/v1/enroll/${param.id}`);
   const details = data?.studentDeatils;
-  //   const [status, setStatus] = useState(details?.request);
+
   console.log(data);
   const [loader, putPostmethod] = usePostUpdate();
   const submitStatus = async (val) => {
@@ -46,8 +46,8 @@ const StudentDetails = () => {
       },
       message: "Status Has Been Changed",
     };
-    const response = await putPostmethod(payload);
-    console.log(response);
+    await putPostmethod(payload);
+
     getInitialData();
   };
   return (

@@ -1,8 +1,8 @@
-import { Suspense, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import "./Login.css";
-import { Button, Container, Paper, TextField, Typography } from "@mui/material";
+import { Container, Paper, TextField, Typography } from "@mui/material";
 
-// import { useDispatch } from "react-redux";
+
 import { toast } from "react-toastify";
 import { usePostUpdate } from "../hooks/usePostUpdate";
 import { isAuthenticated, isNotAuthenticated } from "../redux/reducers/auth";
@@ -213,19 +213,10 @@ const Login = () => {
               </>
             )}
             OR
-            <Button
-              onClick={changeFormHandler}
-              sx={{
-                background: "#006A4E",
-                color: "white",
-                ":hover": {
-                  background: "#006A4E",
-                  color: "white",
-                },
-              }}
-            >
-              Switch To {login ? "Register" : "Login"}
-            </Button>
+            <MainButton
+              title={`Switch To ${login ? "Register" : "Login"}`}
+              onclick={changeFormHandler}
+            />
           </Paper>
         </Container>
       )}

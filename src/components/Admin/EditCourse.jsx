@@ -84,7 +84,7 @@ const EditCourse = () => {
       setSubjects(courseDetails?.subjects);
     }
   }, [courseDetails?._id, param?.cid]);
-  console.log(file);
+  
   return (
     <>
       {loader ? (

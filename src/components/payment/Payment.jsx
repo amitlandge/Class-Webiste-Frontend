@@ -1,4 +1,4 @@
-import {  useState } from "react";
+import { useState } from "react";
 import { Box, TextField, Button, Typography, Container } from "@mui/material";
 import feesAmount from "../../utils/feesAmount.js";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
@@ -20,9 +20,9 @@ const Payment = () => {
   const totalAmount = data?.paymentData?.reduce((accumulator, current) => {
     return accumulator + current.amount;
   }, 0);
-  console.log(data);
+
   const { enrollDetails } = useSelector((state) => state.enroll);
-  
+
   const fees = feesAmount(enrollDetails?.course);
   console.log(fees);
   const [amount, setAmount] = useState("");
@@ -87,7 +87,7 @@ const Payment = () => {
       sx={{
         textAlign: "center",
       }}
-      style={{ marginTop: "50px" }}
+      style={{ marginTop: "5rem" }}
     >
       <Box>
         <Typography variant="h4" align="center" gutterBottom>

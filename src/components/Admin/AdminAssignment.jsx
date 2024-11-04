@@ -78,7 +78,7 @@ const AdminAssignment = () => {
       },
     },
   ];
-  // const deleteProductHandler = (id) => {};
+
   const [, putPostmethod] = usePostUpdate();
   const [data, getInitialData] = useGetData("api/v1/course/getAllAssignment");
   console.log(data?.assignments);

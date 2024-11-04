@@ -30,10 +30,9 @@ const EditEnroll = () => {
 
   const [gender, setGender] = useState("");
   const [loader, putPostmethod] = usePostUpdate();
-  //   const { user } = useSelector((state) => state.auth);
+
   const navigate = useNavigate();
-  const [data] = useCourseName();
-  console.log(data);
+
 
   const { enrollDetails } = useSelector((state) => state.enroll);
   const submitEnrollData = async () => {
@@ -61,7 +60,7 @@ const EditEnroll = () => {
       formData.append("address", address);
       formData.append("phone", phone);
       formData.append("avatar", file);
-      //   formData.append("userId", user._id);
+      
       const data = {
         method: "PUT",
         url: "api/v1/enroll/update",

@@ -52,6 +52,7 @@ const AdminEnroll = () => {
               color: params?.row?.request === "Pending" ? "red" : "green",
               display: "flex",
             }}
+            variant="body1"
           >
             {params?.row?.request}
           </Typography>

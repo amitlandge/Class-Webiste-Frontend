@@ -34,7 +34,7 @@ const AddTeacher = () => {
       toast.error("Please Fill All Information");
       return;
     }
-    console.log(file);
+ 
     let formData = new FormData();
     formData.append("name", name);
     formData.append("subjects", subjects);

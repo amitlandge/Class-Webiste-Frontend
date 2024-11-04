@@ -1,55 +1,62 @@
 import { Route, Routes } from "react-router-dom";
 import "./App.css";
 
-// import Home from "./pages/Home.jsx";
-import Login from "./pages/Login.jsx";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { useEnroll, useUser } from "./hooks/useUserData.js";
 import { lazy, Suspense, useEffect } from "react";
 
-import MyProfile from "./pages/MyProfile.jsx";
-import Enroll from "./pages/Enroll.jsx";
-import Profile from "./pages/Profile.jsx";
-
-import Assignments from "./pages/Student/Assignmets.jsx";
-import QandA from "./pages/Student/QandA.jsx";
-import ChatComponent from "./Dummy/ChatComponent.jsx";
 import { SocketProvider } from "./context/socketContext.jsx";
 
-import SideMenu from "./layout/SideMenu.jsx";
-import Footer from "./pages/Footer.jsx";
-import Courses from "./pages/Courses/Courses.jsx";
-import SuccessStories from "./pages/SuccessStories.jsx";
-import Gallery from "./pages/Gallery.jsx";
-import About from "./pages/About.jsx";
-import Contact from "./pages/Contact.jsx";
-
-import Teachers from "./pages/Home/Teachers.jsx";
-import Payment from "./components/payment/Payment.jsx";
-import Spinner from "./UI/Spinner.jsx";
-import PaymentsDetails from "./components/payment/PaymentsDetails.jsx";
-import AdminDashboard from "./components/Admin/AdminDashboard.jsx";
-import AdminEnroll from "./components/Admin/AdminEnroll.jsx";
-import AdminUsers from "./components/Admin/AdminUsers.jsx";
-
-import StudentDetails from "./components/Admin/StudentDetails.jsx";
-import CreateAssignments from "./components/Admin/CreateAssignments.jsx";
-import AdminCourses from "./components/Admin/AdminCourses.jsx";
-import AddCourses from "./components/Admin/AddCourses.jsx";
-import EditCourse from "./components/Admin/EditCourse.jsx";
-import CourseDetails from "./pages/Courses/CourseDetails.jsx";
-import AdminAssignment from "./components/Admin/AdminAssignment.jsx";
-import EditEnroll from "./pages/EditEnroll.jsx";
 import ScrollToTop from "./utils/ScrollToTop.js";
-import AdminTeachers from "./components/Admin/AdminTeachers.jsx";
-import AddTeacher from "./components/Admin/AddTeacher.jsx";
-import Count from "./UI/Count.jsx";
-// import AdminPrivate from "./privateRoutes/AdminPrivate.jsx";
+
 const Home = lazy(() => import("./pages/Home.jsx"));
 const UserPrivate = lazy(() => import("./privateRoutes/UserPrivate.jsx"));
 const AdminPrivate = lazy(() => import("./privateRoutes/AdminPrivate.jsx"));
 const StudentPrivate = lazy(() => import("./privateRoutes/StudentPrivate.jsx"));
+const NotFoundPage = lazy(() => import("./pages/Home/NotFoundPage.jsx"));
+const AddTeacher = lazy(() => import("./components/Admin/AddTeacher.jsx"));
+const EditEnroll = lazy(() => import("./pages/EditEnroll.jsx"));
+const CourseDetails = lazy(() => import("./pages/Courses/CourseDetails.jsx"));
+const EditCourse = lazy(() => import("./components/Admin/EditCourse.jsx"));
+const AddCourses = lazy(() => import("./components/Admin/AddCourses.jsx"));
+const AdminCourses = lazy(() => import("./components/Admin/AdminCourses.jsx"));
+const AdminEnroll = lazy(() => import("./components/Admin/AdminEnroll.jsx"));
+const Spinner = lazy(() => import("./UI/Spinner.jsx"));
+const Payment = lazy(() => import("./components/payment/Payment.jsx"));
+const Teachers = lazy(() => import("./pages/Home/Teachers.jsx"));
+const Contact = lazy(() => import("./pages/Contact.jsx"));
+const About = lazy(() => import("./pages/About.jsx"));
+const Gallery = lazy(() => import("./pages/Gallery.jsx"));
+const SuccessStories = lazy(() => import("./pages/SuccessStories.jsx"));
+const Courses = lazy(() => import("./pages/Courses/Courses.jsx"));
+const Footer = lazy(() => import("./pages/Footer.jsx"));
+const SideMenu = lazy(() => import("./layout/SideMenu.jsx"));
+const QandA = lazy(() => import("./pages/Student/QandA.jsx"));
+const Assignments = lazy(() => import("./pages/Student/Assignmets.jsx"));
+const Profile = lazy(() => import("./pages/Profile.jsx"));
+const Enroll = lazy(() => import("./pages/Enroll.jsx"));
+const Login = lazy(() => import("./pages/Login.jsx"));
+const StudentDetails = lazy(() =>
+  import("./components/Admin/StudentDetails.jsx")
+);
+const PaymentsDetails = lazy(() =>
+  import("./components/payment/PaymentsDetails.jsx")
+);
+
+const AdminDashboard = lazy(() =>
+  import("./components/Admin/AdminDashboard.jsx")
+);
+const AdminAssignment = lazy(() =>
+  import("./components/Admin/AdminAssignment.jsx")
+);
+const AdminTeachers = lazy(() =>
+  import("./components/Admin/AdminTeachers.jsx")
+);
+const CreateAssignments = lazy(() =>
+  import("./components/Admin/CreateAssignments.jsx")
+);
+const AdminUsers = lazy(() => import("./components/Admin/AdminUsers.jsx"));
 function App() {
   const { getInitialData } = useEnroll();
   const [loadUser] = useUser();
@@ -74,6 +81,7 @@ function App() {
         <Suspense fallback={<Spinner />}>
           <Routes>
             <Route path="/" element={<Home />} />
+            <Route path="/*" element={<NotFoundPage />} />
             <Route path="/home" index element={<Home />} />
             <Route path="/courses" element={<Courses />} />
             <Route path="/success" element={<SuccessStories />} />
@@ -88,7 +96,6 @@ function App() {
                 </SocketProvider>
               }
             >
-              <Route path="/myProfile" element={<MyProfile />} />
               <Route path="/enroll" element={<Enroll />} />
               <Route path="/profile" element={<Profile />} />
 
@@ -125,9 +132,6 @@ function App() {
             </Route>
             <Route path="/course/details/:cid" element={<CourseDetails />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/chat" element={<ChatComponent />} />
-            <Route path="/spinner" element={<Spinner />} />
-            <Route path="/count" element={<Count count={100} />} />
           </Routes>
         </Suspense>
       </main>

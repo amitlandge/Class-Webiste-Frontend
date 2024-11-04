@@ -76,7 +76,7 @@ const AdminTeachers = () => {
   ];
 
   const [data, getInitialData] = useGetData("api/v1/teacher/getAllTeachers");
-  console.log(data);
+
   const [loader, putPostmethod] = usePostUpdate();
   const deleteTeacherHandler = async (id) => {
     const payload = {

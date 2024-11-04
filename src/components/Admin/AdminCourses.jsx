@@ -70,7 +70,7 @@ const AdminCourses = () => {
     },
   ];
   const [data, getInitialData] = useGetData("api/v1/course/getAllCourses");
-  console.log(data);
+
   const [loader, putPostmethod] = usePostUpdate();
   const deleteCourseHandler = async (id) => {
     const payload = {
@@ -78,8 +78,8 @@ const AdminCourses = () => {
       url: `api/v1/course/delete/${id}`,
       message: "Delete Successfully",
     };
-    const response = await putPostmethod(payload);
-    console.log(response);
+    await putPostmethod(payload);
+    
     getInitialData();
   };
   const filterArray = data?.courses?.map((course) => ({
@@ -107,7 +107,7 @@ const AdminCourses = () => {
             columns={column}
             heading={"All Courses"}
             rows={filterArray}
-            // height={"90vh"}
+          
           />
         </AdminLayout>
       )}

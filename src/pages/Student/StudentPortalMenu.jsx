@@ -3,7 +3,7 @@ import { Link, useLocation } from "react-router-dom";
 
 const StudentPortalMenu = () => {
   const location = useLocation();
-  console.log(location.pathname);
+
   return (
     <Box
       sx={{

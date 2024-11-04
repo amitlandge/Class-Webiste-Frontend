@@ -44,7 +44,7 @@ const CreateAssignments = () => {
       toast.error("Please Fill All Information");
       return;
     }
-    console.log(file);
+
     let formData = new FormData();
     formData.append("title", title);
     formData.append("note", note);
@@ -64,7 +64,7 @@ const CreateAssignments = () => {
     };
     try {
       const response = await putPostmethod(data);
-      console.log(response);
+
       if (response?.status === 200) {
         navigate("/admin/assignment");
       }

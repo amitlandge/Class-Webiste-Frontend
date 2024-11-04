@@ -28,7 +28,7 @@ const AddCourses = () => {
   const [file, setFile] = useState();
   const [loader, putPostmethod] = usePostUpdate();
   const navigate = useNavigate();
-  console.log(file);
+
   const addCourseHandler = async () => {
     console.log("Enter");
     if (!title && !subjects && !description && !topic && !file) {
@@ -53,7 +53,7 @@ const AddCourses = () => {
     };
     try {
       const response = await putPostmethod(data);
-      console.log(response);
+
       if (response?.status === 200) {
         navigate("/admin/courses");
       }
@@ -159,7 +159,6 @@ const AddCourses = () => {
                     width: "10rem",
                     height: "10rem",
                     border: "2px solid gray",
-                    //   objectFit: "cover",
                   }}
                 >
                   <img

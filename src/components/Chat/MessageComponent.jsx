@@ -13,19 +13,7 @@ const MessageComponent = (prop) => {
   const { sender, message, attachments, createdAt, _id } = prop.message;
   const { user } = prop;
   const dispatch = useDispatch();
-  // const spring = useSpring({
-  //   from: {
-  //     y: "-100%",
-  //     opacity: "0",
-  //   },
-  //   to: {
-  //     y: "0%",
-  //     opacity: "1",
-  //   },
-  // });
   const deleteMessageHandler = async () => {
-    prop.deleteMsg(_id);
-   
     const data = {
       method: "DELETE",
       url: `api/v1/message/delete/${_id}`,
@@ -34,13 +22,11 @@ const MessageComponent = (prop) => {
     const res = await putPostMethod(data);
     if (res?.status === 200) {
       dispatch(setDeleteMessage(true));
-      console.log("deleteData Succssfully");
+     
     }
   };
   return (
     <div className={sender?.userId === user?._id ? "sender" : "reciver"}>
-      
-
       <Box
         sx={{
           display: "grid",
@@ -84,14 +70,14 @@ const MessageComponent = (prop) => {
       >
         {message}
       </Typography>
-     
+
       <Typography
         variant="caption"
         color={"text.primary"}
         style={{
           alignSelf: "flex-end",
           display: "flex",
-         
+
           alignItems: "center",
           marginTop: "5px",
         }}
@@ -112,7 +98,6 @@ const MessageComponent = (prop) => {
           </IconButton>
         )}
       </Typography>
-      
     </div>
   );
 };

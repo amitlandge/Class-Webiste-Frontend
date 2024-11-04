@@ -1,4 +1,4 @@
-import { Avatar, Box, Button, Grid, Paper, Typography } from "@mui/material";
+import { Avatar, Box, Grid, Paper, Typography } from "@mui/material";
 import { useGetData } from "../hooks/useGetData";
 import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";

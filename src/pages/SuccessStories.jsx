@@ -1,6 +1,7 @@
 import { Avatar, Box, Stack, Typography } from "@mui/material";
-import { dummyStories } from "../Dummy/DummyStories";
+
 import "./Success.css";
+import { success } from "../utils/successStories";
 const SuccessStories = () => {
   return (
     <Box>
@@ -20,7 +21,7 @@ const SuccessStories = () => {
           gap: "2rem",
         }}
       >
-        {dummyStories.map((story) => {
+        {success.map((story) => {
           return (
             <Box
               className={"successCard"}
@@ -41,8 +42,7 @@ const SuccessStories = () => {
               <Avatar src=""></Avatar>
               <em>{story.description}</em>
               <b>
-                {" "}
-                {story.name}, {story.grade}th Grade Student
+                {story.name}, {story.course} Student
               </b>
             </Box>
           );

@@ -56,7 +56,7 @@ const QandA = () => {
   const SymbolColor = {
     color: "#006A4E",
   };
-  console.log(enrollDetails);
+
   const sendMessageHandler = () => {
     const data = {
       message: message,
@@ -114,7 +114,7 @@ const QandA = () => {
     }
   }, [deleteMessage, dispatch]);
 
-  console.log(newMessages);
+
   const allMessages = [...messages, ...newMessages];
   return (
     <div>
@@ -147,8 +147,6 @@ const QandA = () => {
                 />
               ))}
               <div ref={bottomRef} />
-
-              {/* {userTyping && <TypingLoader text="Typing" />} */}
             </Stack>
 
             <Box
@@ -163,9 +161,6 @@ const QandA = () => {
                 gap: "1rem",
               }}
             >
-              {/* <IconButton onClick={openChatMenu}>
-                <MoreVert sx={{ ...SymbolColor }} />
-              </IconButton> */}
               <IconButton onClick={openAttachments}>
                 <AttachFile sx={{ ...SymbolColor }} />
               </IconButton>

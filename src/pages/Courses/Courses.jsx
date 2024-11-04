@@ -1,4 +1,3 @@
-
 import {
   Container,
   Grid,
@@ -7,17 +6,14 @@ import {
   CardMedia,
   Typography,
   Box,
-  
 } from "@mui/material";
 
 import { useGetData } from "../../hooks/useGetData";
 import MainButton from "../../UI/MainButton";
 
-
-
 const Courses = () => {
   const [data] = useGetData("api/v1/course/getAllCourses");
-  console.log(data);
+
   return (
     <Container>
       <Box sx={{ my: 4, textAlign: "center" }}>

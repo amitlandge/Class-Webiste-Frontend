@@ -7,7 +7,7 @@ const AdminDashboard = () => {
   const [data] = useGetData("api/v1/course/getAdminData");
   const [count] = useGetData("api/v1/enroll/get/counts");
   const counts = count?.count;
-  console.log(data);
+
   return (
     <AdminLayout>
       <Box

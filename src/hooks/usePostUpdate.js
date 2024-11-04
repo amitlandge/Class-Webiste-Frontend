@@ -43,7 +43,6 @@ const usePostUpdate = () => {
       return res;
     } catch (error) {
       setLoader(false);
-      
       toast.error(error?.response?.data?.message || "Something went Wrong");
     }
   };

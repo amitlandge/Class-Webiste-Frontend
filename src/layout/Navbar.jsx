@@ -90,7 +90,7 @@ const Navbar = () => {
                 Enroll
               </Link>
             </ListItemButton>
-            {enrollDetails?.request === "Accepted" && (
+            {enrollDetails && enrollDetails?.request === "Accepted" && (
               <ListItemButton>
                 <ListItemIcon>
                   <GroupAdd />
@@ -110,7 +110,7 @@ const Navbar = () => {
                 Profile
               </Link>
             </ListItemButton>
-            {user.role === "ADMIN" && (
+            {user?.role === "ADMIN" && (
               <ListItemButton>
                 <ListItemIcon>
                   <AdminPanelSettings />

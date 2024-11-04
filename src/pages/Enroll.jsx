@@ -33,8 +33,7 @@ const Enroll = () => {
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [data] = useCourseName();
-  console.log(data);
-  
+
   const submitEnrollData = async () => {
     // e.preventDefault();
     const phoneNumber = toString(phone);
@@ -80,7 +79,7 @@ const Enroll = () => {
       };
       try {
         const response = await putPostmethod(data);
-        console.log(response);
+
         if (response?.status === 200) {
           navigate("/home");
         }
