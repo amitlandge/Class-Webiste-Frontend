@@ -1,6 +1,6 @@
 // src/components/VerticalNavbar.js
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   Drawer,
   List,
@@ -35,11 +35,13 @@ import { isNotAuthenticated } from "../redux/reducers/auth";
 
 import axios from "axios";
 import { server } from "../constants/server";
+import { useEnroll } from "../hooks/useUserData";
 
 const Navbar = () => {
   const { isLogin, user } = useSelector((state) => state.auth);
   const { enrollDetails } = useSelector((state) => state.enroll);
   const navigate = useNavigate();
+  const { getInitialData } = useEnroll();
 
   const [openMoreLinks, setOpenMoreLinks] = useState(false);
   const dispatch = useDispatch();
@@ -59,6 +61,9 @@ const Navbar = () => {
       oncloseMenubar();
     }
   };
+  useEffect(() => {
+    getInitialData();
+  }, []);
   return (
     <Drawer
       variant="permanent"
@@ -148,7 +153,6 @@ const Navbar = () => {
               </ListItemIcon>
 
               <Link to={"/gallery"} onClick={oncloseMenubar}>
-                {" "}
                 Gallery
               </Link>
             </ListItemButton>
@@ -167,7 +171,6 @@ const Navbar = () => {
               </ListItemIcon>
 
               <Link to={"/teachers"} onClick={oncloseMenubar}>
-                {" "}
                 Teachers
               </Link>
             </ListItemButton>
@@ -177,7 +180,6 @@ const Navbar = () => {
               </ListItemIcon>
 
               <Link to={"/about"} onClick={oncloseMenubar}>
-                {" "}
                 About
               </Link>
             </ListItemButton>
@@ -208,8 +210,7 @@ const Navbar = () => {
             </ListItemIcon>
 
             <Link to={"/login"} onClick={oncloseMenubar}>
-              {" "}
-              Login{" "}
+              Login
             </Link>
           </ListItemButton>
         )}

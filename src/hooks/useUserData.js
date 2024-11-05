@@ -37,7 +37,7 @@ const useEnroll = () => {
         dispatch(getEnrollDetails(res.data?.enrolldetails));
       }
     } catch (error) {
-      toast.error(error?.response?.data?.message || "Something went Wrong");
+      // toast.error(error?.response?.data?.message || "Something went Wrong");
     }
   };
 
