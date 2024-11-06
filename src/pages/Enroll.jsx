@@ -21,6 +21,7 @@ import { useCourseName } from "../hooks/useCourseName";
 
 const Enroll = () => {
   const [file, setFile] = useState();
+
   const [firstName, setFirstName] = useState("");
   const [middleName, setMiddleName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -260,7 +261,7 @@ const Enroll = () => {
                       setCourse(e.target.value);
                     }}
                   >
-                    {data?.courses.map((c, index) => {
+                    {data?.courses?.map((c, index) => {
                       return (
                         <MenuItem key={index} value={c}>
                           {c}
@@ -272,7 +273,10 @@ const Enroll = () => {
               </Grid>
             </Grid>
           </Container>
-          <MainButton onclick={submitEnrollData} title={"Request For Enroll"} />
+          <MainButton
+            onclick={submitEnrollData}
+            title={"Request For Enrollment"}
+          />
         </div>
       )}
     </>

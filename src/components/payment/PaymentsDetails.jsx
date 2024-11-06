@@ -3,6 +3,7 @@ import { useGetData } from "../../hooks/useGetData";
 import { useEffect } from "react";
 import Table from "../Table/Table";
 import MainButton from "../../UI/MainButton";
+import moment from "moment/moment";
 
 const PaymentsDetails = () => {
   const [data, getInitialData] = useGetData("api/v1/payment/getPaymentData");
@@ -24,17 +25,18 @@ const PaymentsDetails = () => {
       width: "150",
     },
     {
+      field: "course",
+      headerName: "Course",
+      headerClassName: "table-heading",
+      width: "150",
+    },
+    {
       field: "paymentId",
       headerName: "Payment ID",
       headerClassName: "table-heading",
       width: "200",
     },
-    {
-      field: "orderId",
-      headerName: "Order ID",
-      headerClassName: "table-heading",
-      width: "150",
-    },
+
     {
       field: "amount",
       headerName: "Amount (Rs)",
@@ -47,11 +49,20 @@ const PaymentsDetails = () => {
       headerClassName: "table-heading",
       width: "150",
     },
+    {
+      field: "date",
+      headerName: "Date",
+      headerClassName: "table-heading",
+      width: "150",
+    },
   ];
   const filterArray = data?.paymentData?.map((payment) => ({
     ...payment,
     id: payment._id,
+    name: payment.studentName,
+    date: moment(payment?.createdAt).format("YYYY-MM-DD"),
   }));
+  console.log(filterArray);
   return (
     <Container
       sx={{

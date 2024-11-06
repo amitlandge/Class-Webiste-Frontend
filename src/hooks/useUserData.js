@@ -34,7 +34,7 @@ const useEnroll = () => {
         withCredentials: true,
       });
       if (res.status === 200) {
-        dispatch(getEnrollDetails(res.data?.enrolldetails));
+        dispatch(getEnrollDetails(res?.data?.enrolldetails));
       }
     } catch (error) {
       // toast.error(error?.response?.data?.message || "Something went Wrong");

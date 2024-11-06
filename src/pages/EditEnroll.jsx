@@ -17,7 +17,6 @@ import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MainButton from "../UI/MainButton";
 import Spinner from "../UI/Spinner";
-import { useCourseName } from "../hooks/useCourseName";
 
 const EditEnroll = () => {
   const [file, setFile] = useState();
@@ -32,7 +31,6 @@ const EditEnroll = () => {
   const [loader, putPostmethod] = usePostUpdate();
 
   const navigate = useNavigate();
-
 
   const { enrollDetails } = useSelector((state) => state.enroll);
   const submitEnrollData = async () => {
@@ -60,7 +58,7 @@ const EditEnroll = () => {
       formData.append("address", address);
       formData.append("phone", phone);
       formData.append("avatar", file);
-      
+
       const data = {
         method: "PUT",
         url: "api/v1/enroll/update",
@@ -252,7 +250,8 @@ const EditEnroll = () => {
               </Grid>
             </Grid>
           </Container>
-          <MainButton onclick={submitEnrollData} title={"Update Enroll"} />
+          <MainButton onclick={submitEnrollData} title={"Update Enrollment"} />
+          <MainButton title={"Go Back"} url={"/profile"} />
         </div>
       )}
     </>

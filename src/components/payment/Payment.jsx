@@ -5,6 +5,7 @@ import { usePostUpdate } from "../../hooks/usePostUpdate";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { useGetData } from "../../hooks/useGetData.js";
+import MainButton from "../../UI/MainButton.jsx";
 const loadRazorpayScript = () =>
   new Promise((resolve) => {
     const script = document.createElement("script");
@@ -124,10 +125,11 @@ const Payment = () => {
             variant="contained"
             color="primary"
             onClick={handlePayment}
-            sx={{ mt: 3 }}
+            sx={{ m: 3 }}
           >
             Pay Now
           </Button>
+          <MainButton title={"Go Back"} url={"/profile"} />
         </Box>
       </Box>
     </Container>
