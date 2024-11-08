@@ -12,10 +12,10 @@ const Hero = () => {
         sx={{
           width: "35%",
           fontSize: "2rem",
-          textShadow: "0px 1px 2px black",
+
           paddingBottom: "1rem",
           borderBottom: "1px solid white",
-          fontWeight: "800",
+          fontWeight: "600",
           letterSpacing: "1px",
         }}
         variant="h3"

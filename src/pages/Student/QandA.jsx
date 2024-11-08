@@ -1,50 +1,42 @@
 import { Box, IconButton, Stack, TextField } from "@mui/material";
 import StudentPortal from "./StudentPortal";
-import { Suspense, useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import MessageComponent from "../../components/Chat/MessageComponent";
-import { AttachFile, EmojiEmotions, MoreVert, Send } from "@mui/icons-material";
+import { AttachFile, EmojiEmotions, Send } from "@mui/icons-material";
 
 import { getSocket } from "../../context/getSocket.js";
 import { NEW_MESSAGE } from "../../eventConstant.js";
 import { useDispatch, useSelector } from "react-redux";
-
+import "./scrollStyle.css";
 import axios from "axios";
-import { getAllMessages } from "../../redux/reducers/message.js";
+
 import {
-  setDeleteMessage,
   setEmojiPopUp,
   setOpenAttachments,
 } from "../../redux/reducers/misc.js";
 import EmojiToggle from "../../toggle/EmojiToggle.jsx";
 import FileToggle from "../../toggle/FileToggle.jsx";
+
+import { useInfiniteScrollTop } from "6pp";
 const QandA = () => {
   const socket = getSocket();
 
   const [message, setMessage] = useState("");
-
+  const [oldMessage, setOldMessage] = useState({
+    messages: [],
+    totalPages: 1,
+  });
   const { enrollDetails } = useSelector((state) => state.enroll);
-  const { emojiPopUp, deleteMessage } = useSelector((state) => state.misc);
-  const { messages } = useSelector((state) => state.messages);
+  const { emojiPopUp } = useSelector((state) => state.misc);
+
   const { user } = useSelector((state) => state.auth);
   const [anchorEl, setAnchorEle] = useState();
-
+  const [page, setPage] = useState(1);
   const [newMessages, setNewMessage] = useState([]);
-  const bottomRef = useRef(null);
+  const messageEndRef = useRef(null);
+  const chatRef = useRef(null);
   const course = enrollDetails?.course;
   const dispatch = useDispatch();
-  const getIntialData = async () => {
-    const res = await axios.get(
-      `http://localhost:4000/api/v1/message/getAllMessage?course=${course}`,
-      { withCredentials: true }
-    );
-
-    dispatch(getAllMessages(res?.data?.messages));
-
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-  useEffect(() => {
-    getIntialData();
-  }, [course]);
 
   const openEmojiPicker = () => {
     dispatch(setEmojiPopUp(true));
@@ -76,14 +68,14 @@ const QandA = () => {
   });
   const messageListener = useCallback(
     (data) => {
-      if (data?.grade == enrollDetails?.grade) {
+      if (data?.course === enrollDetails?.course) {
         console.log(data);
         setNewMessage((prev) => {
           return [...prev, data];
         });
       }
     },
-    [dispatch, enrollDetails?.grade]
+    [dispatch, enrollDetails?.course]
   );
   useEffect(() => {
     socket.on(NEW_MESSAGE, messageListener);
@@ -97,7 +89,7 @@ const QandA = () => {
   }, [newMessages]);
 
   const scrollBottom = () => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
+    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
   const emojiPickerHandler = (e) => {
@@ -106,16 +98,44 @@ const QandA = () => {
   const closeEmojiPicker = () => {
     dispatch(setEmojiPopUp(false));
   };
+
   useEffect(() => {
-    if (deleteMessage) {
-      getIntialData();
-      dispatch(setDeleteMessage(false));
+    loadMoreMessages();
+  }, [page]);
+
+  const { data: oldMessages, setData: setOldMessages } = useInfiniteScrollTop(
+    chatRef,
+    oldMessage?.totalPages,
+    page,
+    setPage,
+    oldMessage?.messages
+  );
+
+  useEffect(() => {
+    return () => {
+      setMessage("");
+      setOldMessages([]);
       setNewMessage([]);
-    }
-  }, [deleteMessage, dispatch]);
+    };
+  }, []);
+  const loadMoreMessages = async () => {
+    const res = await axios.get(
+      `http://localhost:4000/api/v1/message/getAllMessage`,
+      {
+        params: {
+          course: course,
+          page: page,
+        },
+        withCredentials: true,
+      }
+    );
 
+    const msg = res?.data;
+    setOldMessage(msg);
+  };
 
-  const allMessages = [...messages, ...newMessages];
+  const allMessages = [...oldMessages, ...newMessages];
+
   return (
     <div>
       <StudentPortal>
@@ -123,81 +143,81 @@ const QandA = () => {
           sx={{
             background: "rgb(255,255,255)",
             width: "100%",
-            height: "100%",
+            
           }}
         >
-          <Suspense fallback={<p>Loading...</p>}>
-            <Stack
-              className="chat-container"
-              boxSizing={"border-box"}
-              height={"72vh"}
-              padding={"1rem"}
-              spacing={"1rem"}
-              sx={{
-                overflowX: "hidden",
-                overflowY: "auto !important",
-              }}
-            >
-              {allMessages?.map((message) => (
-                <MessageComponent
-                  key={message?._id}
-                  id={message._id}
-                  message={message || []}
-                  user={user}
-                />
-              ))}
-              <div ref={bottomRef} />
-            </Stack>
+          <Stack
+            ref={chatRef}
+            className="hide-scrollbar"
+            style={{
+              height: "90vh",
+              overflow: "auto",
+              display: "flex",
+              flexDirection: "column",
+              gap: "2rem",
+              padding: "1rem",
+            }}
+          >
+            {allMessages.map((message) => (
+              <MessageComponent
+                key={message?._id}
+                id={message._id}
+                message={message || []}
+                user={user}
+              />
+            ))}
 
-            <Box
-              width={"100%"}
-              height={"10%"}
-              position={"relative"}
-              top={"0"}
+            <div ref={messageEndRef} />
+          </Stack>
+
+          <Box
+            width={"100%"}
+            height={"10%"}
+            position={"relative"}
+            top={"0"}
+            sx={{
+              display: "flex",
+              justifyContent: "center",
+              alignItems: "center",
+              gap: "1rem",
+            }}
+          >
+            <IconButton onClick={openAttachments}>
+              <AttachFile sx={{ ...SymbolColor }} />
+            </IconButton>
+            <IconButton onClick={openEmojiPicker}>
+              <EmojiEmotions sx={{ ...SymbolColor }} />
+            </IconButton>
+            <TextField
+              type="text"
+              variant="standard"
               sx={{
-                display: "flex",
-                justifyContent: "center",
-                alignItems: "center",
-                gap: "1rem",
+                width: "80%",
+                border: "none",
+                padding: "1rem",
+                outline: "none",
               }}
-            >
-              <IconButton onClick={openAttachments}>
-                <AttachFile sx={{ ...SymbolColor }} />
-              </IconButton>
-              <IconButton onClick={openEmojiPicker}>
-                <EmojiEmotions sx={{ ...SymbolColor }} />
-              </IconButton>
-              <TextField
-                type="text"
-                variant="standard"
+              placeholder="Enter Your Message"
+              value={message}
+              onChange={(e) => {
+                setMessage(e.target.value);
+              }}
+            />
+            <IconButton onClick={sendMessageHandler}>
+              <Send
                 sx={{
-                  width: "80%",
-                  border: "none",
-                  padding: "1rem",
-                  outline: "none",
-                }}
-                placeholder="Enter Your Message"
-                value={message}
-                onChange={(e) => {
-                  setMessage(e.target.value);
+                  width: "2rem",
+                  height: "2rem",
+                  background: "#006A4E",
+                  color: "white",
+                  borderRadius: "50%",
+                  padding: "0.5rem",
+                  rotate: "-30deg",
+                  cursor: "pointer",
                 }}
               />
-              <IconButton onClick={sendMessageHandler}>
-                <Send
-                  sx={{
-                    width: "2rem",
-                    height: "2rem",
-                    background: "#006A4E",
-                    color: "white",
-                    borderRadius: "50%",
-                    padding: "0.5rem",
-                    rotate: "-30deg",
-                    cursor: "pointer",
-                  }}
-                />
-              </IconButton>
-            </Box>
-          </Suspense>
+            </IconButton>
+          </Box>
         </Box>
       </StudentPortal>
       <EmojiToggle
@@ -205,7 +225,7 @@ const QandA = () => {
         onClose={closeEmojiPicker}
         selectedEmoji={emojiPickerHandler}
       />
-      <FileToggle anchorEl={anchorEl} />
+      {anchorEl && <FileToggle anchorEl={anchorEl} />}
     </div>
   );
 };

@@ -1,0 +1,8 @@
+/* CSS file (e.g., styles.css) */
+.hide-scrollbar {
+    scrollbar-width: none; /* Hides scrollbar in Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+    display: none; /* Hides scrollbar in Chrome, Safari */
+}

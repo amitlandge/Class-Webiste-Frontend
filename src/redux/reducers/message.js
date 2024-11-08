@@ -4,14 +4,10 @@ const messageSlice = createSlice({
   name: "messages",
   initialState: {
     messages: [],
-    newMessages: [],
   },
   reducers: {
     getAllMessages: (state, action) => {
-      state.messages = action.payload;
-    },
-    setAllNewMessage: (state, action) => {
-      state.newMessages.concat(action.payload);
+      state.messages = state.messages.concat(action.payload);
     },
   },
 });

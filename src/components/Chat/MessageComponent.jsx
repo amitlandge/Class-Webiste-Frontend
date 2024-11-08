@@ -1,30 +1,14 @@
-import { Box, IconButton, Typography } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import RenderAttchments from "./RenderAttchments";
 import moment from "moment";
 import { checkExtention } from "../../features/checkExtention";
 import "./Message.css";
 import { memo } from "react";
-import { Delete } from "@mui/icons-material";
-import { usePostUpdate } from "../../hooks/usePostUpdate";
-import { useDispatch } from "react-redux";
-import { setDeleteMessage } from "../../redux/reducers/misc";
+
 const MessageComponent = (prop) => {
-  const [, putPostMethod] = usePostUpdate();
-  const { sender, message, attachments, createdAt, _id } = prop.message;
+  const { sender, message, attachments, createdAt } = prop.message;
   const { user } = prop;
-  const dispatch = useDispatch();
-  const deleteMessageHandler = async () => {
-    const data = {
-      method: "DELETE",
-      url: `api/v1/message/delete/${_id}`,
-      message: "Delete Message Successfully",
-    };
-    const res = await putPostMethod(data);
-    if (res?.status === 200) {
-      dispatch(setDeleteMessage(true));
-     
-    }
-  };
+
   return (
     <div className={sender?.userId === user?._id ? "sender" : "reciver"}>
       <Box
@@ -83,20 +67,6 @@ const MessageComponent = (prop) => {
         }}
       >
         {moment(createdAt).fromNow(true)}
-
-        {sender?.userId === user?._id && (
-          <IconButton
-            onClick={() => {
-              deleteMessageHandler();
-            }}
-          >
-            <Delete
-              sx={{
-                cursor: "pointer",
-              }}
-            />
-          </IconButton>
-        )}
       </Typography>
     </div>
   );
