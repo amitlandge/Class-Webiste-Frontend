@@ -6,6 +6,9 @@ import { Link } from "react-router-dom";
 import { Delete, Edit } from "@mui/icons-material";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { setEnrolls } from "../../redux/reducers/admin";
 
 const AdminEnroll = () => {
   const column = [
@@ -101,11 +104,21 @@ const AdminEnroll = () => {
   ];
   const [data, getInitialData] = useGetData("api/v1/getAllEnrolls");
 
-  const filterArray = data?.enrolls?.map((enroll) => ({
-    ...enroll,
-    id: enroll._id,
-    updated: moment(enroll?.createdAt).format("YYYY-MM-DD"),
-  }));
+  const { enrolls } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data?.enrolls) {
+      dispatch(setEnrolls(data?.enrolls));
+    }
+  }, [data, dispatch]);
+  const filteredArray = useMemo(() => {
+    return enrolls?.map((enroll) => ({
+      ...enroll,
+      id: enroll._id,
+      updated: moment(enroll?.createdAt).format("YYYY-MM-DD"),
+    }));
+  }, [enrolls]);
+
   const [, putPostmethod] = usePostUpdate();
   const deleteEnrollHandler = async (id) => {
     const payload = {
@@ -113,8 +126,7 @@ const AdminEnroll = () => {
       url: `api/v1/enroll/delete/${id}`,
       message: "Delete Successfully",
     };
-    const response = await putPostmethod(payload);
-    console.log(response);
+    await putPostmethod(payload);
     getInitialData();
   };
   return (
@@ -122,7 +134,7 @@ const AdminEnroll = () => {
       <Table
         columns={column}
         heading={"All Enrollments"}
-        rows={filterArray}
+        rows={filteredArray}
         height={"90vh"}
       />
     </AdminLayout>

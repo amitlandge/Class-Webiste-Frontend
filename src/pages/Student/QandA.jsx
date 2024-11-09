@@ -18,6 +18,7 @@ import EmojiToggle from "../../toggle/EmojiToggle.jsx";
 import FileToggle from "../../toggle/FileToggle.jsx";
 
 import { useInfiniteScrollTop } from "6pp";
+import { server } from "../../constants/server.js";
 const QandA = () => {
   const socket = getSocket();
 
@@ -119,16 +120,13 @@ const QandA = () => {
     };
   }, []);
   const loadMoreMessages = async () => {
-    const res = await axios.get(
-      `http://localhost:4000/api/v1/message/getAllMessage`,
-      {
-        params: {
-          course: course,
-          page: page,
-        },
-        withCredentials: true,
-      }
-    );
+    const res = await axios.get(`${server}/api/v1/message/getAllMessage`, {
+      params: {
+        course: course,
+        page: page,
+      },
+      withCredentials: true,
+    });
 
     const msg = res?.data;
     setOldMessage(msg);
@@ -143,7 +141,6 @@ const QandA = () => {
           sx={{
             background: "rgb(255,255,255)",
             width: "100%",
-            
           }}
         >
           <Stack

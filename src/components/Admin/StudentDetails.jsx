@@ -94,10 +94,7 @@ const StudentDetails = () => {
                         <TableCell>Age</TableCell>
                         <TableCell>{details?.age}</TableCell>
                       </TableRow>
-                      {/* <TableRow>
-                      <TableCell>Email</TableCell>
-                      <TableCell>{details?.email}</TableCell>
-                    </TableRow> */}
+
                       <TableRow>
                         <TableCell>Address</TableCell>
                         <TableCell>{details?.address}</TableCell>

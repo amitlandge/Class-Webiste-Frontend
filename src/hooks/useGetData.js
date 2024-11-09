@@ -6,7 +6,7 @@ import { toast } from "react-toastify";
 const useGetData = (url) => {
   const [data, setData] = useState();
   const getInitialData = async () => {
-    console.log(`${server}/${url}`);
+    
     try {
       const res = await axios.get(`${server}/${url}`, {
         withCredentials: true,

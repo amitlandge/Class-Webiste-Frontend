@@ -7,22 +7,24 @@ import { getEnrollDetails } from "../redux/reducers/enroll";
 import "./Profile.css";
 import MainButton from "../UI/MainButton";
 const Profile = () => {
-  const [data, getIntialData] = useGetData("api/v1/enrollDetails");
+  const [data] = useGetData("api/v1/enrollDetails");
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
   const { enrollDetails } = useSelector((state) => state.enroll);
-  useEffect(() => {
-    getIntialData();
-  }, []);
-  const details = data?.enrolldetails;
-  dispatch(getEnrollDetails(details));
 
+  useEffect(() => {
+    const details = data?.enrolldetails;
+    if (details) {
+      dispatch(getEnrollDetails(details));
+    }
+  }, [data, dispatch]);
+  console.log(enrollDetails, enrollDetails !== null);
   return (
     <Box sx={{ p: 4 }}>
       <Paper sx={{ p: 4, mb: 4, textAlign: "center" }}>
         <Avatar
           alt={enrollDetails?.firstName}
-          src={enrollDetails?.avatar.url}
+          src={enrollDetails?.avatar?.url}
           sx={{ width: 100, height: 100, margin: "auto" }}
         />
         <Typography variant="h4" sx={{ mt: 2 }}>
@@ -34,7 +36,7 @@ const Profile = () => {
       </Paper>
 
       {/* Personal Information Section */}
-      {enrollDetails && (
+      {enrollDetails?._id && (
         <Grid container spacing={4}>
           <Grid item xs={12} md={8}>
             <Paper

@@ -2,12 +2,29 @@ import { Box, Paper, Typography } from "@mui/material";
 import AdminLayout from "./AdminLayout.jsx";
 import StudentChart, { DonutChart } from "./Charts.jsx";
 import { useGetData } from "../../hooks/useGetData.js";
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import {
+  setAdminDataCount,
+  setCountGirlsBoys,
+} from "../../redux/reducers/admin.js";
 
 const AdminDashboard = () => {
   const [data] = useGetData("api/v1/course/getAdminData");
-  const [count] = useGetData("api/v1/enroll/get/counts");
-  const counts = count?.count;
+  const [girlsBoys] = useGetData("api/v1/enroll/get/counts");
+  const { dataCount, countGirlsBoys } = useSelector((state) => state.admin);
 
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data) {
+      dispatch(setAdminDataCount(data));
+    }
+  }, [data, dispatch]);
+  useEffect(() => {
+    if (girlsBoys) {
+      dispatch(setCountGirlsBoys(girlsBoys?.count));
+    }
+  }, [girlsBoys, dispatch]);
   return (
     <AdminLayout>
       <Box
@@ -52,7 +69,7 @@ const AdminDashboard = () => {
                   fontSize: "4rem",
                 }}
               >
-                {data?.enroll}
+                {dataCount?.enroll}
               </Typography>
               <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
                 Students
@@ -66,7 +83,7 @@ const AdminDashboard = () => {
                   fontSize: "4rem",
                 }}
               >
-                {data?.user}
+                {dataCount?.user}
               </Typography>
               <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
                 Users
@@ -80,7 +97,7 @@ const AdminDashboard = () => {
                   fontSize: "4rem",
                 }}
               >
-                {data?.assignments}
+                {dataCount?.assignments}
               </Typography>
               <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
                 Assignments
@@ -94,7 +111,7 @@ const AdminDashboard = () => {
                   fontSize: "4rem",
                 }}
               >
-                {data?.course}
+                {dataCount?.course}
               </Typography>
               <Typography variant="body" sx={{ fontSize: "1.2rem" }}>
                 Courses
@@ -114,7 +131,10 @@ const AdminDashboard = () => {
           }}
         >
           <Typography variant="h6">Girls And Boys</Typography>
-          <DonutChart value={[counts?.girls, counts?.boys]} width={"50vw"} />
+          <DonutChart
+            value={[countGirlsBoys?.girls, countGirlsBoys?.boys]}
+            width={"50vw"}
+          />
         </Paper>
       </Box>
     </AdminLayout>

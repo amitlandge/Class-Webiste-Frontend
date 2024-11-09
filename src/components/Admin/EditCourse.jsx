@@ -9,8 +9,9 @@ import { useNavigate, useParams } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import { useGetData } from "../../hooks/useGetData";
 import { useDispatch, useSelector } from "react-redux";
-import { setCourseDetails } from "../../redux/reducers/course";
+
 import AdminLayout from "./AdminLayout";
+import { setCourseDetails } from "../../redux/reducers/admin.js";
 
 const EditCourse = () => {
   const VisuallyHiddenInput = styled("input")({
@@ -32,7 +33,7 @@ const EditCourse = () => {
   useEffect(() => {
     dispatch(setCourseDetails(data?.course));
   }, [dispatch, data?.course]);
-  const { courseDetails } = useSelector((state) => state.course);
+  const { courseDetails } = useSelector((state) => state.admin);
   const [title, setTitle] = useState();
   const [subjects, setSubjects] = useState();
   const [description, setDescription] = useState();
@@ -41,7 +42,6 @@ const EditCourse = () => {
   const [loader, putPostmethod] = usePostUpdate();
   const navigate = useNavigate();
 
-  console.log(data?.course);
   const addCourseHandler = async () => {
     if (!title && !subjects && !description && !topic && !file) {
       toast.error("Please Fill All Information");
@@ -84,7 +84,7 @@ const EditCourse = () => {
       setSubjects(courseDetails?.subjects);
     }
   }, [courseDetails?._id, param?.cid]);
-  
+
   return (
     <>
       {loader ? (

@@ -5,7 +5,7 @@ function AdminPrivate() {
   const { user } = useSelector((state) => state.auth);
 
   return (
-    <div>{user?.role !== "ADMIN" ? <Navigate to="/login" /> : <Outlet />}</div>
+    <div>{user?.role === "ADMIN" ? <Outlet /> : <Navigate to="/home" />}</div>
   );
 }
 

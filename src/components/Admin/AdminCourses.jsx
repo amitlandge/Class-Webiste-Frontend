@@ -7,6 +7,10 @@ import { Box, Button } from "@mui/material";
 import MainButton from "../../UI/MainButton.jsx";
 import { usePostUpdate } from "../../hooks/usePostUpdate.js";
 import Spinner from "../../UI/Spinner.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { setAdminCourses } from "../../redux/reducers/admin.js";
+import moment from "moment";
 const AdminCourses = () => {
   const column = [
     {
@@ -37,11 +41,18 @@ const AdminCourses = () => {
       width: "210",
     },
     {
+      field: "updated",
+      headerName: "Updated",
+      headerClassName: "table-heading",
+
+      width: "150 ",
+    },
+    {
       field: "actions",
       flex: 0.3,
       headerClassName: "table-heading",
       headerName: "Actions",
-      minWidth: 250,
+      minWidth: 150,
       type: "number",
       sortable: false,
       renderCell: (params) => {
@@ -79,13 +90,24 @@ const AdminCourses = () => {
       message: "Delete Successfully",
     };
     await putPostmethod(payload);
-    
+
     getInitialData();
   };
-  const filterArray = data?.courses?.map((course) => ({
-    ...course,
-    id: course._id,
-  }));
+  const { courses } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data?.courses) {
+      dispatch(setAdminCourses(data?.courses));
+    }
+  }, [data, dispatch]);
+  const filteredArray = useMemo(() => {
+    return courses?.map((course) => ({
+      ...course,
+      id: course._id,
+      updated: moment(course?.createdAt).format("YYYY-MM-DD"),
+    }));
+  }, [courses]);
+
   return (
     <>
       {loader ? (
@@ -106,8 +128,7 @@ const AdminCourses = () => {
           <Table
             columns={column}
             heading={"All Courses"}
-            rows={filterArray}
-          
+            rows={filteredArray}
           />
         </AdminLayout>
       )}

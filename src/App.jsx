@@ -80,7 +80,7 @@ function App() {
       >
         <Suspense fallback={<Spinner />}>
           <Routes>
-            <Route path="/" element={<Home />} />
+            <Route path="/" index element={<Home />} />
             <Route path="/*" element={<NotFoundPage />} />
             <Route path="/home" index element={<Home />} />
             <Route path="/courses" element={<Courses />} />

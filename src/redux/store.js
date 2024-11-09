@@ -4,7 +4,10 @@ import enrollSlice from "./reducers/enroll";
 import secretSlice from "./reducers/secretKey";
 import messageSlice from "./reducers/message";
 import miscSlice from "./reducers/misc";
-import courseSlice from "./reducers/course";
+
+import assignmentSlice from "./reducers/assignment";
+import coursesSlice from "./reducers/courses";
+import adminSlice from "./reducers/admin";
 
 const store = configureStore({
   reducer: {
@@ -13,7 +16,9 @@ const store = configureStore({
     [secretSlice.name]: secretSlice.reducer,
     [messageSlice.name]: messageSlice.reducer,
     [miscSlice.name]: miscSlice.reducer,
-    [courseSlice.name]: courseSlice.reducer,
+    [assignmentSlice.name]: assignmentSlice.reducer,
+    [coursesSlice.name]: coursesSlice.reducer,
+    [adminSlice.name]: adminSlice.reducer,
   },
 });
 

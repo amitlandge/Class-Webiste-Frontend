@@ -7,6 +7,10 @@ import { Avatar, Box, Button } from "@mui/material";
 import MainButton from "../../UI/MainButton.jsx";
 import { usePostUpdate } from "../../hooks/usePostUpdate.js";
 import Spinner from "../../UI/Spinner.jsx";
+import { useDispatch, useSelector } from "react-redux";
+import { setAdminTeachers } from "../../redux/reducers/admin.js";
+import { useEffect, useMemo } from "react";
+import moment from "moment";
 const AdminTeachers = () => {
   const column = [
     {
@@ -88,10 +92,24 @@ const AdminTeachers = () => {
     console.log(response);
     getInitialData();
   };
-  const filterArray = data?.teachers?.map((teacher) => ({
-    ...teacher,
-    id: teacher._id,
-  }));
+  //   const filterArray = data?.teachers?.map((teacher) => ({
+  //     ...teacher,
+  //     id: teacher._id,
+  //   }));
+  const { teachers } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data?.teachers) {
+      dispatch(setAdminTeachers(data?.teachers));
+    }
+  }, [data, dispatch]);
+  const filteredArray = useMemo(() => {
+    return teachers?.map((teacher) => ({
+      ...teacher,
+      id: teacher._id,
+      updated: moment(teacher?.createdAt).format("YYYY-MM-DD"),
+    }));
+  }, [teachers]);
   return (
     <>
       {loader ? (
@@ -109,7 +127,11 @@ const AdminTeachers = () => {
           >
             <MainButton title={"+ Add Teacher"} url={"/admin/add-teacher"} />
           </Box>
-          <Table columns={column} heading={"All Courses"} rows={filterArray} />
+          <Table
+            columns={column}
+            heading={"All Courses"}
+            rows={filteredArray}
+          />
         </AdminLayout>
       )}
     </>

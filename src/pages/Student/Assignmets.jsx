@@ -7,11 +7,12 @@ import { useGetData } from "../../hooks/useGetData";
 import DownloadButton from "../../UI/DownloadButton";
 
 import moment from "moment";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import StudentPortal from "./StudentPortal.jsx";
 import Table from "../../components/Table/Table.jsx";
+import { setAssignment } from "../../redux/reducers/assignment.js";
+import { useEffect, useMemo } from "react";
 
-const downloadAssignments = (e) => {};
 const Assignments = () => {
   const column = [
     {
@@ -57,7 +58,7 @@ const Assignments = () => {
             }}
           >
             <Link>
-              <Button onClick={downloadAssignments}>
+              <Button>
                 <DownloadButton id={params.id} />
               </Button>
             </Link>
@@ -67,25 +68,31 @@ const Assignments = () => {
     },
   ];
 
-
   const { enrollDetails } = useSelector((state) => state.enroll);
+  const { assignment } = useSelector((state) => state.assignment);
   const course = enrollDetails?.course;
-  console.log(course);
-  const [data] = useGetData(`api/v1/course/assignment/course?course=${course}`);
-  console.log(data?.assignments);
+  const dispatch = useDispatch();
 
-  const filterArray = data?.assignment?.map((assignment) => ({
-    ...assignment,
-    id: assignment._id,
-    updated: moment(assignment?.createdAt).format("YYYY-MM-DD"),
-  }));
-  console.log(filterArray);
+  const [data] = useGetData(`api/v1/course/assignment/course?course=${course}`);
+
+  useEffect(() => {
+    if (data?.assignment) {
+      dispatch(setAssignment(data.assignment));
+    }
+  }, [data, dispatch]);
+  const filteredArray = useMemo(() => {
+    return assignment?.map((assignment) => ({
+      ...assignment,
+      id: assignment._id,
+      updated: moment(assignment?.createdAt).format("YYYY-MM-DD"),
+    }));
+  }, [assignment]);
   return (
     <StudentPortal>
       <Table
         columns={column}
         heading={"All Assignments"}
-        rows={filterArray}
+        rows={filteredArray}
         height={"90vh"}
       />
     </StudentPortal>

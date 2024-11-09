@@ -9,6 +9,9 @@ import { usePostUpdate } from "../../hooks/usePostUpdate";
 import DownloadButton from "../../UI/DownloadButton";
 
 import moment from "moment";
+import { useDispatch, useSelector } from "react-redux";
+import { useEffect, useMemo } from "react";
+import { setAdminAssignment } from "../../redux/reducers/admin";
 
 const downloadAssignments = (e) => {};
 const AdminAssignment = () => {
@@ -81,7 +84,7 @@ const AdminAssignment = () => {
 
   const [, putPostmethod] = usePostUpdate();
   const [data, getInitialData] = useGetData("api/v1/course/getAllAssignment");
-  console.log(data?.assignments);
+
   const deleteAssignmentHandler = async (id) => {
     const payload = {
       method: "DELETE",
@@ -92,12 +95,22 @@ const AdminAssignment = () => {
     console.log(response);
     getInitialData();
   };
-  const filterArray = data?.assignments?.map((assignment) => ({
-    ...assignment,
-    id: assignment._id,
-    updated: moment(assignment?.createdAt).format("YYYY-MM-DD"),
-  }));
-  console.log(filterArray);
+
+  const { assignments } = useSelector((state) => state.admin);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data?.assignments) {
+      dispatch(setAdminAssignment(data?.assignments));
+    }
+  }, [data, dispatch]);
+  const filteredArray = useMemo(() => {
+    return assignments?.map((assignment) => ({
+      ...assignment,
+      id: assignment._id,
+      updated: moment(assignment?.createdAt).format("YYYY-MM-DD"),
+    }));
+  }, [assignments]);
+
   return (
     <AdminLayout>
       <Box
@@ -114,7 +127,7 @@ const AdminAssignment = () => {
       <Table
         columns={column}
         heading={"All Assignments"}
-        rows={filterArray}
+        rows={filteredArray}
         height={"90vh"}
       />
     </AdminLayout>

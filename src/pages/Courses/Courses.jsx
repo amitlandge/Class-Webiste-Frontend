@@ -10,10 +10,19 @@ import {
 
 import { useGetData } from "../../hooks/useGetData";
 import MainButton from "../../UI/MainButton";
+import { useEffect, useMemo } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { setCourses } from "../../redux/reducers/courses.js";
 
 const Courses = () => {
   const [data] = useGetData("api/v1/course/getAllCourses");
-
+  const { courses } = useSelector((state) => state.courses);
+  const dispatch = useDispatch();
+  useEffect(() => {
+    if (data?.courses) {
+      dispatch(setCourses(data?.courses));
+    }
+  }, [data, dispatch]);
   return (
     <Container>
       <Box sx={{ my: 4, textAlign: "center" }}>
@@ -32,47 +41,49 @@ const Courses = () => {
         justifyContent={"stretch"}
         alignItems={"stretch"}
       >
-        {data?.courses.map((course, index) => (
-          <Grid item xs={12} sm={6} md={4} key={index}>
-            <Card
-              sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: "100%",
-                borderRadius: 4,
-                boxShadow: 5,
-                alignItems: "flex-start",
-                justifyContent: "space-between",
-              }}
-            >
-              <CardMedia
-                component="img"
-                height="200"
-                image={course.attachment?.url}
-                alt={`${course.grade} image`}
-              />
-              <CardContent
+        {useMemo(() => {
+          return courses?.map((course, index) => (
+            <Grid item xs={12} sm={6} md={4} key={index}>
+              <Card
                 sx={{
                   display: "flex",
                   flexDirection: "column",
+                  height: "100%",
+                  borderRadius: 4,
+                  boxShadow: 5,
+                  alignItems: "flex-start",
+                  justifyContent: "space-between",
                 }}
               >
-                <Typography variant="h5" component="h2" gutterBottom>
-                  {course.title}
-                </Typography>
-                <Typography variant="body2" color="textSecondary" paragraph>
-                  {course.description}
-                </Typography>
-                <MainButton
-                  title={"View Details"}
-                  url={`/course/details/${course._id}`}
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={course.attachment?.url}
+                  alt={`${course.grade} image`}
+                />
+                <CardContent
+                  sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                  }}
                 >
-                  View Details
-                </MainButton>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                  <Typography variant="h5" component="h2" gutterBottom>
+                    {course.title}
+                  </Typography>
+                  <Typography variant="body2" color="textSecondary" paragraph>
+                    {course.description}
+                  </Typography>
+                  <MainButton
+                    title={"View Details"}
+                    url={`/course/details/${course._id}`}
+                  >
+                    View Details
+                  </MainButton>
+                </CardContent>
+              </Card>
+            </Grid>
+          ));
+        }, [courses])}
       </Grid>
     </Container>
   );
