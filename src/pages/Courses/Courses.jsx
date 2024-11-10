@@ -49,17 +49,17 @@ const Courses = () => {
                   display: "flex",
                   flexDirection: "column",
                   height: "100%",
-                  borderRadius: 4,
+                  borderRadius: 0,
                   boxShadow: 5,
-                  alignItems: "flex-start",
+                  alignItems: "stretch",
                   justifyContent: "space-between",
                 }}
               >
                 <CardMedia
                   component="img"
                   height="200"
-                  image={course.attachment?.url}
-                  alt={`${course.grade} image`}
+                  image={course?.attachment?.url}
+                  alt={`${course.course} image`}
                 />
                 <CardContent
                   sx={{
@@ -73,13 +73,13 @@ const Courses = () => {
                   <Typography variant="body2" color="textSecondary" paragraph>
                     {course.description}
                   </Typography>
-                  <MainButton
-                    title={"View Details"}
-                    url={`/course/details/${course._id}`}
-                  >
-                    View Details
-                  </MainButton>
                 </CardContent>
+                <MainButton
+                  title={"View Details"}
+                  url={`/course/details/${course._id}`}
+                >
+                  View Details
+                </MainButton>
               </Card>
             </Grid>
           ));

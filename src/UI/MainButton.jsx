@@ -8,6 +8,7 @@ const MainButton = (prop) => {
       sx={{
         background: color,
         color: "white",
+        borderRadius: 0,
         ":hover": {
           background: color,
           color: "white",

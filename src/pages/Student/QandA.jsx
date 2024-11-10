@@ -1,4 +1,10 @@
-import { Box, IconButton, Stack, TextField } from "@mui/material";
+import {
+  Box,
+  IconButton,
+  Stack,
+  TextField,
+  useMediaQuery,
+} from "@mui/material";
 import StudentPortal from "./StudentPortal";
 import { useCallback, useEffect, useRef, useState } from "react";
 import MessageComponent from "../../components/Chat/MessageComponent";
@@ -20,6 +26,7 @@ import FileToggle from "../../toggle/FileToggle.jsx";
 import { useInfiniteScrollTop } from "6pp";
 import { server } from "../../constants/server.js";
 const QandA = () => {
+  const [messageLimit, setMessageLimit] = useState(5);
   const socket = getSocket();
 
   const [message, setMessage] = useState("");
@@ -49,6 +56,16 @@ const QandA = () => {
   const SymbolColor = {
     color: "#006A4E",
   };
+
+  const isSmallScreen = useMediaQuery("(max-width:700px)");
+
+  useEffect(() => {
+    if (isSmallScreen) {
+      setMessageLimit(8);
+    } else {
+      setMessageLimit(5);
+    }
+  }, [isSmallScreen]);
 
   const sendMessageHandler = () => {
     const data = {
@@ -124,6 +141,7 @@ const QandA = () => {
       params: {
         course: course,
         page: page,
+        limit: messageLimit,
       },
       withCredentials: true,
     });
