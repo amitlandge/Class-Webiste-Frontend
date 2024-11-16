@@ -17,36 +17,6 @@ import MainButton from "../../UI/MainButton";
 import { useGetData } from "../../hooks/useGetData";
 import StudentPortal from "./StudentPortal";
 
-const lectures = [
-  {
-    title: "Introduction to Algebra",
-    subject: "Mathematics",
-    videos: [
-      { title: "Part 1", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { title: "Part 2", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-    ],
-  },
-  {
-    title: "Photosynthesis Explained",
-    subject: "Biology",
-    videos: [
-      {
-        title: "Full Lecture",
-        url: "https://www.w3schools.com/html/mov_bbb.mp4",
-      },
-    ],
-  },
-  {
-    title: "World War II Overview",
-    subject: "History",
-    videos: [
-      { title: "Part 1", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { title: "Part 2", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-      { title: "Summary", url: "https://www.w3schools.com/html/mov_bbb.mp4" },
-    ],
-  },
-];
-
 const Lectures = () => {
   const { enrollDetails } = useSelector((state) => state.enroll);
 

@@ -26,7 +26,7 @@ import FileToggle from "../../toggle/FileToggle.jsx";
 import { useInfiniteScrollTop } from "6pp";
 import { server } from "../../constants/server.js";
 const QandA = () => {
-  const [messageLimit, setMessageLimit] = useState(5);
+  const [messageLimit, setMessageLimit] = useState(10);
   const socket = getSocket();
 
   const [message, setMessage] = useState("");
@@ -65,7 +65,7 @@ const QandA = () => {
       setMessageLimit(10);
       console.log(messageLimit);
     } else {
-      setMessageLimit(8);
+      setMessageLimit(10);
     }
   }, [isSmallScreen]);
   console.log(messageLimit);
