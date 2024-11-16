@@ -61,12 +61,14 @@ const QandA = () => {
 
   useEffect(() => {
     if (isSmallScreen) {
-      setMessageLimit(8);
+      console.log(isSmallScreen);
+      setMessageLimit(10);
+      console.log(messageLimit);
     } else {
-      setMessageLimit(5);
+      setMessageLimit(8);
     }
   }, [isSmallScreen]);
-
+  console.log(messageLimit);
   const sendMessageHandler = () => {
     const data = {
       message: message,

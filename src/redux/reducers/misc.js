@@ -8,6 +8,7 @@ const miscSlice = createSlice({
     deleteMessage: false,
     sideMenu: false,
     moreToggle: false,
+    openLecture: false,
   },
   reducers: {
     setEmojiPopUp: (state, action) => {
@@ -25,6 +26,9 @@ const miscSlice = createSlice({
     setMoreToggle: (state, action) => {
       state.moreToggle = action.payload;
     },
+    setLectureOpen: (state, action) => {
+      state.openLecture = action.payload;
+    },
   },
 });
 export default miscSlice;
@@ -34,4 +38,5 @@ export const {
   setDeleteMessage,
   setSideMenu,
   setMoreToggle,
+  setLectureOpen,
 } = miscSlice.actions;

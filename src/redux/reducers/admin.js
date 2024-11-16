@@ -11,6 +11,7 @@ const adminSlice = createSlice({
     courses: [],
     courseDetails: {},
     teachers: [],
+    lectures: [],
   },
   reducers: {
     setAdminDataCount: (state, action) => {
@@ -37,6 +38,9 @@ const adminSlice = createSlice({
     setAdminTeachers: (state, action) => {
       state.teachers = action.payload;
     },
+    setAdminLecture: (state, action) => {
+      state.lectures = action.payload;
+    },
   },
 });
 export default adminSlice;
@@ -49,4 +53,5 @@ export const {
   setAdminCourses,
   setCourseDetails,
   setAdminTeachers,
+  setAdminLecture,
 } = adminSlice.actions;

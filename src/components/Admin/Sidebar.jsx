@@ -5,6 +5,7 @@ import {
   Dashboard,
   Groups,
   Message,
+  VideoCall,
 } from "@mui/icons-material";
 import { Button, Stack, Typography } from "@mui/material";
 import { Link, useLocation, useNavigate } from "react-router-dom";
@@ -38,6 +39,11 @@ const SidebarLinks = [
     url: "/admin/teachers",
     name: "Teachers",
     icon: <CastForEducation />,
+  },
+  {
+    url: "/admin/lecture",
+    name: "Lecture",
+    icon: <VideoCall />,
   },
 ];
 

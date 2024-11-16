@@ -9,6 +9,9 @@ import { lazy, Suspense, useEffect } from "react";
 import { SocketProvider } from "./context/socketContext.jsx";
 
 import ScrollToTop from "./utils/ScrollToTop.js";
+import AdminLectures from "./components/Admin/AdminLectures.jsx";
+import CreateLecture from "./components/Admin/CreateLecture.jsx";
+import Lectures from "./pages/Student/Lectures.jsx";
 
 const Home = lazy(() => import("./pages/Home.jsx"));
 const UserPrivate = lazy(() => import("./privateRoutes/UserPrivate.jsx"));
@@ -111,12 +114,13 @@ function App() {
               <Route path="/admin/courses" element={<AdminCourses />} />
               <Route path="/admin/add-course" element={<AddCourses />} />
               <Route path="/admin/course/edit/:cid" element={<EditCourse />} />
-
+              <Route path="/admin/lecture" element={<AdminLectures />} />
               <Route
                 path="/admin/create-assignment"
                 element={<CreateAssignments />}
               />
               <Route path="/admin/assignment" element={<AdminAssignment />} />
+              <Route path="/admin/create-lecture" element={<CreateLecture />} />
             </Route>
             <Route
               element={
@@ -129,6 +133,7 @@ function App() {
               <Route path="/payment-details" element={<PaymentsDetails />} />
               <Route path="/assignments" element={<Assignments />} />
               <Route path="/qAnda" element={<QandA />} />
+              <Route path="/lectures" element={<Lectures />} />
             </Route>
             <Route path="/course/details/:cid" element={<CourseDetails />} />
             <Route path="/login" element={<Login />} />

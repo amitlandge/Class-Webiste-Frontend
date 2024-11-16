@@ -70,6 +70,31 @@ const StudentPortalMenu = () => {
         >
           Assignments
         </Link>
+
+        <Link
+          to={"/lectures"}
+          style={
+            location.pathname === "/lectures"
+              ? {
+                  background: "gray",
+                  color: "white",
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
+                }
+              : {
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: "0.5rem",
+                  padding: "1rem 2rem",
+                  borderRadius: "3rem",
+                }
+          }
+        >
+          Lectures
+        </Link>
       </MenuList>
     </Box>
   );
