@@ -6,6 +6,7 @@ import Introduction from "./Home/Introduction";
 import Testimonial from "./Home/Testimonial";
 import WhyChoose from "./Home/WhyChoose";
 import CountSection from "./Home/CountSection";
+import WhoWeAre from "./Home/WhoWeAre";
 
 const Home = () => {
   return (
@@ -22,6 +23,9 @@ const Home = () => {
       <Grid item xs={12} marginBottom={"5%"}>
         <CountSection />
       </Grid>
+      <Grid item xs={12} marginBottom={"2%"}>
+        <WhoWeAre />
+      </Grid>
       <Grid item xs={12} marginBottom={"5%"}>
         <Introduction />
       </Grid>
@@ -29,7 +33,7 @@ const Home = () => {
       <Grid item xs={12} marginBottom={"5%"}>
         <Testimonial />
       </Grid>
-      <Grid item xs={12} marginBottom={"5%"}>
+      <Grid item xs={12} marginBottom={"2%"}>
         <WhyChoose />
       </Grid>
       {/* <Grid item xs={12}>
