@@ -63,12 +63,15 @@ const Lectures = () => {
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  height: "100%",
                 }}
               >
                 <CardMedia>
                   <video
-                    width="100%"
+                    style={{
+                      width: "100%",
+                      height: "10rem",
+                      objectFit: "cover",
+                    }}
                     controls={false}
                     muted
                     onClick={() => handleOpen(lecture)}

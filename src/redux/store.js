@@ -8,6 +8,7 @@ import miscSlice from "./reducers/misc";
 import assignmentSlice from "./reducers/assignment";
 import coursesSlice from "./reducers/courses";
 import adminSlice from "./reducers/admin";
+import attendaceSlice from "./reducers/attendance";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +20,7 @@ const store = configureStore({
     [assignmentSlice.name]: assignmentSlice.reducer,
     [coursesSlice.name]: coursesSlice.reducer,
     [adminSlice.name]: adminSlice.reducer,
+    [attendaceSlice.name]: attendaceSlice.reducer,
   },
 });
 
