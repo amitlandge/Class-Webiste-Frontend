@@ -1,12 +1,13 @@
 import { Button } from "@mui/material";
 import { Link } from "react-router-dom";
 
-const MainButton = (prop) => {
+const SubmitButton = (prop) => {
   const color = prop.bgcolor || "rgb(40, 44, 52)";
-  const type = prop.type;
-  console.log(type);
+  const title = prop.title || "Submit";
+
   return (
     <Button
+      type="submit"
       sx={{
         background: color,
         color: "white",
@@ -16,11 +17,19 @@ const MainButton = (prop) => {
           color: "white",
         },
       }}
-      onClick={prop.onclick}
     >
-      <Link to={prop?.url}>{prop.title}</Link>
+      {prop.url ? (
+        <Link
+          to={prop.url}
+          style={{ textDecoration: "none", color: "inherit" }}
+        >
+          {title}
+        </Link>
+      ) : (
+        title
+      )}
     </Button>
   );
 };
 
-export default MainButton;
+export default SubmitButton;
