@@ -1,7 +1,7 @@
 import { CameraAltOutlined } from "@mui/icons-material";
 import {
   Avatar,
-  Container,
+  Box,
   FormControl,
   Grid,
   InputLabel,
@@ -11,82 +11,67 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import { toast } from "react-toastify";
+
 import { usePostUpdate } from "../hooks/usePostUpdate";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import MainButton from "../UI/MainButton";
+
 import Spinner from "../UI/Spinner";
 import { useCourseName } from "../hooks/useCourseName";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { enrollValidation } from "../utils/validationSchema.js";
+import SubmitButton from "../UI/SubmitButton.jsx";
+import { toast } from "react-toastify";
 
 const Enroll = () => {
   const [file, setFile] = useState();
 
-  const [firstName, setFirstName] = useState("");
-  const [middleName, setMiddleName] = useState("");
-  const [lastName, setLastName] = useState("");
-  const [address, setAddress] = useState("");
-  const [phone, setPhone] = useState();
-  const [age, setAge] = useState();
-  const [course, setCourse] = useState();
-  const [gender, setGender] = useState("");
   const [loader, putPostmethod] = usePostUpdate();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
   const [data] = useCourseName();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+    reset,
+  } = useForm({
+    resolver: yupResolver(enrollValidation),
+  });
 
-  const submitEnrollData = async () => {
-    // e.preventDefault();
-    const phoneNumber = toString(phone);
-    if (phoneNumber.trim().length === 10) {
-      toast.error("Phone Number Should be 10 Number");
-      return;
-    }
-    if (age < 10 && age > 50) {
-      toast.error("Age is Invalid");
-      return;
-    }
-    if (
-      !firstName &&
-      !middleName &&
-      !lastName &&
-      !address &&
-      !age &&
-      !course &&
-      !gender
-    ) {
-      toast.error("Please Fill All Information");
-      return;
-    } else {
-      let formData = new FormData();
-      formData.append("firstName", firstName);
-      formData.append("middleName", middleName);
-      formData.append("lastName", lastName);
-      formData.append("gender", gender);
-      formData.append("age", age);
-      formData.append("course", course);
-      formData.append("address", address);
-      formData.append("phone", phone);
-      formData.append("avatar", file);
-      formData.append("userId", user._id);
-      const data = {
-        method: "POST",
-        url: "api/v1/enroll",
-        payload: formData,
-        message: "Enroll Request Successfully",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
-      try {
-        const response = await putPostmethod(data);
+  const submitEnrollData = async (enrollData) => {
+    console.log(enrollData);
 
-        if (response?.status === 200) {
-          navigate("/home");
-        }
-      } catch (error) {
-        console.log(error);
+    let formData = new FormData();
+    formData.append("firstName", enrollData.firstName);
+    formData.append("middleName", enrollData.middleName);
+    formData.append("lastName", enrollData.lastName);
+    formData.append("gender", enrollData.gender);
+    formData.append("age", enrollData.age);
+    formData.append("course", enrollData.course);
+    formData.append("address", enrollData.address);
+    formData.append("phone", enrollData.phone);
+    formData.append("avatar", enrollData.avatar);
+    formData.append("userId", user._id);
+    const data = {
+      method: "POST",
+      url: "api/v1/enroll",
+      payload: formData,
+      message: "Enroll Request Successfully",
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    };
+    try {
+      const response = await putPostmethod(data);
+
+      if (response?.status === 200) {
+        navigate("/home");
       }
+    } catch (error) {
+      reset();
+      console.log(error);
     }
   };
   return (
@@ -109,17 +94,18 @@ const Enroll = () => {
           <Typography variant="h4" align="center" gutterBottom>
             Enrollment Form
           </Typography>
-          <Container
+          <Box
             component="form"
             sx={{
               display: "flex",
               flexDirection: "column",
               flexWrap: "wrap",
-
               alignItems: "center",
               gap: "2rem",
               width: "70vw",
             }}
+            onSubmit={handleSubmit(submitEnrollData)}
+            encType="multipart/form-data"
           >
             <div>
               <Avatar
@@ -132,88 +118,135 @@ const Enroll = () => {
                     cursor: "pointer",
                   }}
                 />
-                <input
-                  type="file"
-                  accept="image/*"
-                  style={{
-                    position: "relative",
-                    top: "-10px",
-                    left: "-2rem",
-                    opacity: "0.0",
-                  }}
-                  onChange={(e) => {
-                    setFile(e.target.files[0]);
-                    console.log(e.target.files[0]);
-                  }}
+                <small style={{ fontSize: "10px", color: "red" }}>
+                  {errors?.avatar?.message &&
+                    "Upload a JPEG or PNG file (Max: 2MB)"}
+                </small>
+                <Controller
+                  name="avatar"
+                  control={control}
+                  defaultValue=""
+                  render={({ field }) => (
+                    <>
+                      <TextField
+                        type="file"
+                        variant="outlined"
+                        sx={{
+                          position: "relative",
+                          top: "-3rem",
+                          left: "-2rem",
+                          opacity: "0.0",
+                          cursor: "pointer",
+                        }}
+                        fullWidth
+                        InputLabelProps={{ shrink: true }}
+                        onChange={(e) => {
+                          field.onChange(e.target.files[0]);
+                          setFile(e.target.files[0]);
+                        }}
+                        error={!!errors.file}
+                        helperText={
+                          errors.avatar
+                            ? errors.avatar.message
+                            : "Upload a JPEG or PNG file (Max: 2MB)"
+                        }
+                      />
+                    </>
+                  )}
                 />
               </div>
             </div>
             <Grid container spacing={2}>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="First Name"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setFirstName(e.target.value);
-                  }}
-                  value={firstName}
+                <Controller
+                  name="firstName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      type="text"
+                      fullWidth
+                      label="First Name"
+                      variant="outlined"
+                      error={!!errors.firstName}
+                      helperText={errors.firstName?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Middle Name"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setMiddleName(e.target.value);
-                  }}
-                  value={middleName}
-                />
-              </Grid>
-
-              <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Last Name"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setLastName(e.target.value);
-                  }}
-                  value={lastName}
+                <Controller
+                  name="middleName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      type="text"
+                      label="Middle Name"
+                      variant="outlined"
+                      error={!!errors.middleName}
+                      helperText={errors.middleName?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
                 />
               </Grid>
 
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Phone Number"
-                  variant="outlined"
-                  type="number"
-                  onChange={(e) => {
-                    setPhone(e.target.value);
-                  }}
-                  value={phone}
+                <Controller
+                  name="lastName"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      type="text"
+                      label="Last Name"
+                      variant="outlined"
+                      error={!!errors.lastName}
+                      helperText={errors.lastName?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
+                />
+              </Grid>
+
+              <Grid item xs={12} sm={6}>
+                <Controller
+                  name="phone"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      type="number"
+                      label="Phone Number"
+                      variant="outlined"
+                      error={!!errors.phone}
+                      helperText={errors.phone?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Home Address"
-                  variant="outlined"
-                  type="address"
-                  onChange={(e) => {
-                    setAddress(e.target.value);
-                  }}
-                  value={address}
+                <Controller
+                  name="address"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      type="address"
+                      label="Address"
+                      variant="outlined"
+                      error={!!errors.address}
+                      helperText={errors.address?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
@@ -221,62 +254,75 @@ const Enroll = () => {
                   <InputLabel id="demo-simple-select-label" fullWidth>
                     Gender
                   </InputLabel>
-                  <Select
-                    fullWidth
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={gender}
-                    label="Gender"
-                    onChange={(e) => {
-                      setGender(e.target.value);
-                    }}
-                  >
-                    <MenuItem value={"male"}>Male</MenuItem>
-                    <MenuItem value={"female"}>Female</MenuItem>
-                  </Select>
+                  <Controller
+                    name="gender"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        fullWidth
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Gender"
+                        error={!!errors.gender}
+                        helperText={errors.gender?.message}
+                      >
+                        <MenuItem value={"male"}>Male</MenuItem>
+                        <MenuItem value={"female"}>Female</MenuItem>
+                      </Select>
+                    )}
+                  />
                 </FormControl>
               </Grid>
               <Grid item xs={12} sm={6}>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Age"
-                  variant="outlined"
-                  type="number"
-                  onChange={(e) => {
-                    setAge(e.target.value);
-                  }}
-                  value={age}
+                <Controller
+                  name="age"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      type="number"
+                      label="Age"
+                      variant="outlined"
+                      error={!!errors.age}
+                      helperText={errors.age?.message}
+                      sx={{ mb: 2 }}
+                    />
+                  )}
                 />
               </Grid>
               <Grid item xs={12} sm={6}>
                 <FormControl fullWidth>
                   <InputLabel id="demo-simple-select-label">Course</InputLabel>
-                  <Select
-                    labelId="demo-simple-select-label"
-                    id="demo-simple-select"
-                    value={course}
-                    label="Course"
-                    onChange={(e) => {
-                      setCourse(e.target.value);
-                    }}
-                  >
-                    {data?.courses?.map((c, index) => {
-                      return (
-                        <MenuItem key={index} value={c}>
-                          {c}
-                        </MenuItem>
-                      );
-                    })}
-                  </Select>
+                  <Controller
+                    name="course"
+                    control={control}
+                    render={({ field }) => (
+                      <Select
+                        {...field}
+                        fullWidth
+                        labelId="demo-simple-select-label"
+                        id="demo-simple-select"
+                        label="Course"
+                        error={!!errors.course}
+                        helperText={errors.course?.message}
+                      >
+                        {data?.courses?.map((c, index) => {
+                          return (
+                            <MenuItem key={index} value={c}>
+                              {c}
+                            </MenuItem>
+                          );
+                        })}
+                      </Select>
+                    )}
+                  />
                 </FormControl>
               </Grid>
             </Grid>
-          </Container>
-          <MainButton
-            onclick={submitEnrollData}
-            title={"Request For Enrollment"}
-          />
+            <SubmitButton title={"Request For Enrollment"} />
+          </Box>
         </div>
       )}
     </>
