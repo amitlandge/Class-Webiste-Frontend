@@ -1,4 +1,4 @@
-import { Box, Grid } from "@mui/material";
+import { Grid } from "@mui/material";
 import Hero from "./Home/Hero";
 import MainSection from "./Home/MainSection";
 import Heading from "./Home/Heading";

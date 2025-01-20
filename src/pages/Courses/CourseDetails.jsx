@@ -12,11 +12,20 @@ import {
 } from "@mui/material";
 import { AccessTime, Person } from "@mui/icons-material";
 import MainButton from "../../UI/MainButton";
+import { useQuery } from "@tanstack/react-query";
+import { fetchData } from "../../utils/fetchData";
+import { toast } from "react-toastify";
 
 const CourseDetails = () => {
   const param = useParams();
   const { isLogin } = useSelector((state) => state.auth);
-  const [data] = useGetData(`api/v1/course/getCourseDetails/${param.cid}`);
+  const { data } = useQuery({
+    queryKey: ["courseDatails", `api/v1/course/getCourseDetails/${param.cid}`], // Unique key for caching
+    queryFn: fetchData,
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+  });
   const course = data?.course;
   const fess = feesAmount(course?.title);
   return (

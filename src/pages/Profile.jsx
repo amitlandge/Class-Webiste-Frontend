@@ -18,7 +18,9 @@ const Profile = () => {
       dispatch(getEnrollDetails(details));
     }
   }, [data, dispatch]);
-  console.log(enrollDetails, enrollDetails !== null);
+
+  
+
   return (
     <Box sx={{ p: 4 }}>
       <Paper sx={{ p: 4, mb: 4, textAlign: "center" }}>

@@ -22,6 +22,7 @@ const Lectures = () => {
 
   const course = enrollDetails?.course;
   const [data] = useGetData(`api/v1/lecture/course?course=${course}`);
+
   console.log(data);
   const [selectedLecture, setSelectedLecture] = useState("");
   const { openLecture } = useSelector((state) => state.misc);
