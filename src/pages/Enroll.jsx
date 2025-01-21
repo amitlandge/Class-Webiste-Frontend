@@ -12,7 +12,6 @@ import {
 } from "@mui/material";
 import { useState } from "react";
 
-import { usePostUpdate } from "../hooks/usePostUpdate";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
@@ -23,14 +22,15 @@ import { yupResolver } from "@hookform/resolvers/yup";
 import { enrollValidation } from "../utils/validationSchema.js";
 import SubmitButton from "../UI/SubmitButton.jsx";
 import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../utils/postData.js";
 
 const Enroll = () => {
   const [file, setFile] = useState();
 
-  const [loader, putPostmethod] = usePostUpdate();
   const { user } = useSelector((state) => state.auth);
   const navigate = useNavigate();
-  const [data] = useCourseName();
+  const [course] = useCourseName();
   const {
     control,
     handleSubmit,
@@ -39,7 +39,17 @@ const Enroll = () => {
   } = useForm({
     resolver: yupResolver(enrollValidation),
   });
-
+  const { mutate, isPending } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      toast("Enroll Successfully");
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+      reset();
+    },
+  });
   const submitEnrollData = async (enrollData) => {
     console.log(enrollData);
 
@@ -54,29 +64,18 @@ const Enroll = () => {
     formData.append("phone", enrollData.phone);
     formData.append("avatar", enrollData.avatar);
     formData.append("userId", user._id);
-    const data = {
-      method: "POST",
+
+    mutate({
       url: "api/v1/enroll",
-      payload: formData,
-      message: "Enroll Request Successfully",
+      eventData: formData,
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    };
-    try {
-      const response = await putPostmethod(data);
-
-      if (response?.status === 200) {
-        navigate("/home");
-      }
-    } catch (error) {
-      reset();
-      console.log(error);
-    }
+    });
   };
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <div
@@ -308,7 +307,7 @@ const Enroll = () => {
                         error={!!errors.course}
                         helperText={errors.course?.message}
                       >
-                        {data?.courses?.map((c, index) => {
+                        {course?.courses?.map((c, index) => {
                           return (
                             <MenuItem key={index} value={c}>
                               {c}

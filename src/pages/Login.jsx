@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import "./Login.css";
 import { Box, Container, Paper, TextField, Typography } from "@mui/material";
 
-import { usePostUpdate } from "../hooks/usePostUpdate";
 import { isAuthenticated, isNotAuthenticated } from "../redux/reducers/auth";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
@@ -13,12 +12,26 @@ import { loginValidation } from "../utils/validationSchema.js";
 import { Controller, useForm } from "react-hook-form";
 import SubmitButton from "../UI/SubmitButton.jsx";
 import Register from "./Register.jsx";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../utils/postData.js";
+import { toast } from "react-toastify";
 const Login = () => {
   const [login, setIsLogin] = useState(false);
   const navigate = useNavigate();
 
   const { isLogin } = useSelector((state) => state.auth);
-
+  const { mutate, isPending, data } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      dispatch(isAuthenticated(data?.data?.user));
+      toast("Login Successfully");
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+      dispatch(isNotAuthenticated());
+    },
+  });
   const dispatch = useDispatch();
   const {
     control,
@@ -28,23 +41,10 @@ const Login = () => {
     resolver: yupResolver(loginValidation),
   });
 
-  const [loader, putPostmethod] = usePostUpdate();
-
   const onLoginHandler = async (logData) => {
-    const data = {
-      method: "POST",
-      url: "api/v1/user/login",
-      payload: logData,
-      message: "Login Successfully",
-    };
-    const response = await putPostmethod(data);
-    if (response?.status === 200) {
-      dispatch(isAuthenticated(response?.data.user));
-      navigate("/home");
-    } else {
-      dispatch(isNotAuthenticated());
-    }
+    mutate({ url: "api/v1/user/login", eventData: logData });
   };
+  console.log(data?.user);
   const changeFormHandler = () => {
     setIsLogin((prev) => !prev);
   };
@@ -57,7 +57,7 @@ const Login = () => {
   }, [isLogin, navigate]);
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <Container

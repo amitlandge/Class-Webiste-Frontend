@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import {
   Container,
   Grid,
@@ -6,7 +6,6 @@ import {
   CardContent,
   Typography,
   CardActions,
-  Button,
   CardMedia,
 } from "@mui/material";
 
@@ -23,7 +22,6 @@ const Lectures = () => {
   const course = enrollDetails?.course;
   const [data] = useGetData(`api/v1/lecture/course?course=${course}`);
 
-  console.log(data);
   const [selectedLecture, setSelectedLecture] = useState("");
   const { openLecture } = useSelector((state) => state.misc);
   const dispatch = useDispatch();

@@ -1,16 +1,19 @@
 import { Box, TextField, Typography } from "@mui/material";
 import { Controller, useForm } from "react-hook-form";
 import SubmitButton from "../UI/SubmitButton";
-import { usePostUpdate } from "../hooks/usePostUpdate.js";
+
 import { useDispatch } from "react-redux";
 import { isAuthenticated, isNotAuthenticated } from "../redux/reducers/auth.js";
-import { Navigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { registerValidation } from "../utils/validationSchema.js";
 import Spinner from "../UI/Spinner.jsx";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../utils/postData.js";
+import { toast } from "react-toastify";
 
 const Register = () => {
-  const [loader, putPostmethod] = usePostUpdate();
+  const navigate = useNavigate();
   const {
     control,
     handleSubmit,
@@ -19,26 +22,24 @@ const Register = () => {
     resolver: yupResolver(registerValidation),
   });
   const dispatch = useDispatch();
-  let registerformSubmitHandler = async (regData) => {
-    console.log(regData);
-    const data = {
-      method: "POST",
-      url: "api/v1/user/register",
-      payload: regData,
-      message: "Register Successfully",
-    };
-    const response = await putPostmethod(data);
-    console.log(response);
-    if (response?.status === 200) {
-      dispatch(isAuthenticated(response?.data.user));
-      Navigate("/");
-    } else {
+  const { mutate, isPending, data } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      dispatch(isAuthenticated(data?.data?.user));
+      toast("Register Successfully");
+      navigate("/");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
       dispatch(isNotAuthenticated());
-    }
+    },
+  });
+  let registerformSubmitHandler = async (regData) => {
+    mutate({ url: "api/v1/user/register", eventData: regData });
   };
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <Box>

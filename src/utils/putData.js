@@ -1,11 +1,14 @@
 import axios from "axios";
 import { server } from "../constants/server";
 
-export const fetchData = async (prop) => {
-  const [, url] = prop.queryKey;
+export async function putDataHandler(prop) {
+  const { url, eventData } = prop;
+  console.log("Props:", prop);
+
   try {
-    const res = await axios.get(`${server}/${url}`, {
+    const res = await axios.put(`${server}/${url}`, eventData, {
       withCredentials: true,
+      headers: prop.headers && prop.headers,
     });
     console.log("Response:", res.data);
     return res.data;
@@ -16,4 +19,4 @@ export const fetchData = async (prop) => {
     customError.info = error.response?.data || null;
     throw customError;
   }
-};
+}

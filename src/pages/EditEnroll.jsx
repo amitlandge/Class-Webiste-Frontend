@@ -12,11 +12,13 @@ import {
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import { toast } from "react-toastify";
-import { usePostUpdate } from "../hooks/usePostUpdate";
+
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import MainButton from "../UI/MainButton";
 import Spinner from "../UI/Spinner";
+import { useMutation } from "@tanstack/react-query";
+import { putDataHandler } from "../utils/putData";
 
 const EditEnroll = () => {
   const [file, setFile] = useState();
@@ -28,13 +30,22 @@ const EditEnroll = () => {
   const [age, setAge] = useState();
 
   const [gender, setGender] = useState("");
-  const [loader, putPostmethod] = usePostUpdate();
 
   const navigate = useNavigate();
 
   const { enrollDetails } = useSelector((state) => state.enroll);
+  const { mutate, isPending, reset } = useMutation({
+    mutationFn: putDataHandler,
+    onSuccess: () => {
+      toast("Enroll Update Successfully");
+      navigate("/profile");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+      reset();
+    },
+  });
   const submitEnrollData = async () => {
-    // e.preventDefault();
     const phoneNumber = toString(phone);
     if (phoneNumber.trim().length === 10) {
       toast.error("Phone Number Should be 10 Number");
@@ -58,25 +69,13 @@ const EditEnroll = () => {
       formData.append("address", address);
       formData.append("phone", phone);
       formData.append("avatar", file);
-
-      const data = {
-        method: "PUT",
+      mutate({
         url: "api/v1/enroll/update",
-        payload: formData,
-        message: "Enroll Request Successfully",
+        eventData: formData,
         headers: {
           "Content-Type": "multipart/form-data",
         },
-      };
-      try {
-        const response = await putPostmethod(data);
-        console.log(response);
-        if (response?.status === 200) {
-          navigate("/profile");
-        }
-      } catch (error) {
-        console.log(error);
-      }
+      });
     }
   };
   useEffect(() => {
@@ -90,7 +89,7 @@ const EditEnroll = () => {
   }, []);
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <div
