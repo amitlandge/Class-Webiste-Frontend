@@ -115,15 +115,17 @@ const Navbar = () => {
                 Profile
               </Link>
             </ListItemButton>
-            <ListItemButton>
-              <ListItemIcon>
-                <AccountCircle />
-              </ListItemIcon>
+            {enrollDetails && enrollDetails?.request === "Accepted" && (
+              <ListItemButton>
+                <ListItemIcon>
+                  <AccountCircle />
+                </ListItemIcon>
 
-              <Link to={"/attendance"} onClick={oncloseMenubar}>
-                Attendance
-              </Link>
-            </ListItemButton>
+                <Link to={"/attendance"} onClick={oncloseMenubar}>
+                  Attendance
+                </Link>
+              </ListItemButton>
+            )}
             {user?.role === "ADMIN" && (
               <ListItemButton>
                 <ListItemIcon>
