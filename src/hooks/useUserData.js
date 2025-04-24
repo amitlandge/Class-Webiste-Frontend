@@ -36,9 +36,7 @@ const useEnroll = () => {
       if (res.status === 200) {
         dispatch(getEnrollDetails(res?.data?.enrolldetails));
       }
-    } catch (error) {
-      // toast.error(error?.response?.data?.message || "Something went Wrong");
-    }
+    } catch (error) {}
   };
 
   return { getInitialData };

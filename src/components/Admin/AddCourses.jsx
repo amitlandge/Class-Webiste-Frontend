@@ -1,6 +1,13 @@
 import styled from "@emotion/styled";
 import { Cloud } from "@mui/icons-material";
-import { Button, Container, Grid, TextField, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Container,
+  Grid,
+  TextField,
+  Typography,
+} from "@mui/material";
 import { useState } from "react";
 import MainButton from "../../UI/MainButton";
 import { toast } from "react-toastify";
@@ -8,6 +15,10 @@ import { usePostUpdate } from "../../hooks/usePostUpdate";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import AdminLayout from "./AdminLayout";
+import { useForm, Controller } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { courseValidation } from "../../utils/validationSchema";
+import SubmitButton from "../../UI/SubmitButton";
 
 const AddCourses = () => {
   const VisuallyHiddenInput = styled("input")({
@@ -21,26 +32,26 @@ const AddCourses = () => {
     whiteSpace: "nowrap",
     width: 1,
   });
-  const [title, setTitle] = useState("");
-  const [subjects, setSubjects] = useState("");
-  const [description, setDescription] = useState("");
-  const [topic, setTopic] = useState("");
+
   const [file, setFile] = useState();
   const [loader, putPostmethod] = usePostUpdate();
   const navigate = useNavigate();
-
-  const addCourseHandler = async () => {
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(courseValidation),
+  });
+  const addCourseHandler = async (courseData) => {
     console.log("Enter");
-    if (!title && !subjects && !description && !topic && !file) {
-      toast.error("Please Fill All Information");
-      return;
-    }
+
     console.log(file);
     let formData = new FormData();
-    formData.append("title", title);
-    formData.append("subjects", subjects);
-    formData.append("description", description);
-    formData.append("topic", topic);
+    formData.append("title", courseData.title);
+    formData.append("subjects", courseData.subjects);
+    formData.append("description", courseData.description);
+    formData.append("topic", courseData.topic);
     formData.append("image", file);
     const data = {
       method: "POST",
@@ -75,7 +86,9 @@ const AddCourses = () => {
             <Typography variant="h4" align="center" gutterBottom>
               Add Courses
             </Typography>
-            <Grid
+            <Box
+              component={"form"}
+              onSubmit={handleSubmit(addCourseHandler)}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -85,55 +98,71 @@ const AddCourses = () => {
               }}
             >
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Title"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setTitle(e.target.value);
-                  }}
-                  value={title}
+                <Controller
+                  name="title"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      error={!!errors.title}
+                      helperText={errors.title?.message}
+                      label="Title"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Subjects"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setSubjects(e.target.value);
-                  }}
-                  value={subjects}
+                <Controller
+                  name="subjects"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      error={!!errors.subjects}
+                      helperText={errors.subjects?.message}
+                      label="Subjects"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Description"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setDescription(e.target.value);
-                  }}
-                  value={description}
+                <Controller
+                  name="description"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      error={!!errors.description}
+                      helperText={errors.description?.message}
+                      label="Description"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Topics"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setTopic(e.target.value);
-                  }}
-                  value={topic}
+                <Controller
+                  control={control}
+                  name="topic"
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      error={!!errors.topic}
+                      helperText={errors.topic?.message}
+                      label="Topics"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
@@ -172,9 +201,9 @@ const AddCourses = () => {
                 </Grid>
               )}
               <Grid item>
-                <MainButton title={"Add Course"} onclick={addCourseHandler} />
+                <SubmitButton title={"+ Add Course"} />
               </Grid>
-            </Grid>
+            </Box>
           </Container>
         </AdminLayout>
       )}

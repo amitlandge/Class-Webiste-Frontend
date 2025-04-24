@@ -1,8 +1,8 @@
 import styled from "@emotion/styled";
 import { Cloud } from "@mui/icons-material";
 import {
+  Box,
   Button,
-  Container,
   FormControl,
   InputLabel,
   MenuItem,
@@ -10,20 +10,31 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { useState } from "react";
-import MainButton from "../../UI/MainButton";
-import { toast } from "react-toastify";
-import { usePostUpdate } from "../../hooks/usePostUpdate";
+
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import { useCourseName } from "../../hooks/useCourseName";
 import AdminLayout from "./AdminLayout";
+import { Controller, useForm } from "react-hook-form";
+
+import { yupResolver } from "@hookform/resolvers/yup";
+import { assignmentValidation } from "../../utils/validationSchema.js";
+import SubmitButton from "../../UI/SubmitButton.jsx";
+import { useState } from "react";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../../utils/postData.js";
+import { toast } from "react-toastify";
 
 const CreateAssignments = () => {
-  const [title, setTitle] = useState("");
-  const [note, setNote] = useState("");
-  const [course, setCourse] = useState("");
   const [file, setFile] = useState([]);
+
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(assignmentValidation),
+  });
   const VisuallyHiddenInput = styled("input")({
     clip: "rect(0 0 0 0)",
     clipPath: "inset(50%)",
@@ -35,52 +46,55 @@ const CreateAssignments = () => {
     whiteSpace: "nowrap",
     width: 1,
   });
-  console.log(file);
-  const [loader, putPostmethod] = usePostUpdate();
+
   const navigate = useNavigate();
   const [data] = useCourseName();
-  const addAssignmentsHandler = async () => {
-    if (!title && !note && !course && !file) {
-      toast.error("Please Fill All Information");
-      return;
-    }
+  const { mutate, isPending } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      toast("Create Assignment Successfully");
+      navigate("/admin/assignment");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+    },
+  });
+  const addAssignmentsHandler = async (assignData) => {
+    console.log(assignData);
 
     let formData = new FormData();
-    formData.append("title", title);
-    formData.append("note", note);
-    formData.append("course", course);
+    formData.append("title", assignData.title);
+    formData.append("note", assignData.note);
+    formData.append("course", assignData.course);
 
-    file.forEach((file) => {
+    Array.from(file).forEach((file) => {
+      console.log(file);
       formData.append("images", file);
     });
-    const data = {
-      method: "POST",
+    mutate({
       url: "api/v1/course/create-assignment",
-      payload: formData,
-      message: "Create Assignment Successfully",
+      eventData: formData,
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    };
-    try {
-      const response = await putPostmethod(data);
-
-      if (response?.status === 200) {
-        navigate("/admin/assignment");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <AdminLayout>
-          <Container
+          <Typography variant="h4" textAlign={"center"}>
+            Create Assignment
+          </Typography>
+
+          <Box
+            width={"70vw"}
+            component={"form"}
+            onSubmit={handleSubmit(addAssignmentsHandler)}
+            encType="multipart/form-data"
             sx={{
-              width: "70%",
               display: "flex",
               flexDirection: "column",
               justifyContent: "center",
@@ -89,71 +103,91 @@ const CreateAssignments = () => {
               margin: "2rem auto",
             }}
           >
-            <Typography variant="h4">Create Assignment</Typography>
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Title"
-              variant="outlined"
-              type="text"
-              onChange={(e) => {
-                setTitle(e.target.value);
-              }}
-              value={title}
+            <Controller
+              name="title"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  error={!!errors.title}
+                  helperText={errors.title?.message}
+                  fullWidth
+                  id="title"
+                  label="Title"
+                  variant="outlined"
+                  type="text"
+                />
+              )}
             />
-            <TextField
-              fullWidth
-              id="outlined-basic"
-              label="Note"
-              variant="outlined"
-              type="text"
-              onChange={(e) => {
-                setNote(e.target.value);
-              }}
-              value={note}
+
+            <Controller
+              name="note"
+              control={control}
+              render={({ field }) => (
+                <TextField
+                  {...field}
+                  error={!!errors.note}
+                  helperText={errors.note?.message}
+                  fullWidth
+                  id="note"
+                  label="Note"
+                  variant="outlined"
+                  type="text"
+                />
+              )}
             />
             <FormControl fullWidth>
               <InputLabel id="demo-simple-select-label">Course</InputLabel>
-              <Select
-                labelId="demo-simple-select-label"
-                id="demo-simple-select"
-                value={course}
-                label="Course"
-                onChange={(e) => {
-                  setCourse(e.target.value);
-                }}
-              >
-                {data?.courses.map((c, index) => {
-                  return (
-                    <MenuItem key={index} value={c}>
-                      {c}
-                    </MenuItem>
-                  );
-                })}
-              </Select>
-            </FormControl>
-            <Button
-              component="label"
-              role={undefined}
-              variant="contained"
-              tabIndex={-1}
-              startIcon={<Cloud />}
-            >
-              Upload files
-              <VisuallyHiddenInput
-                type="file"
-                onChange={(event) => setFile(Array.from(event.target.files))}
-                multiple
+              <Controller
+                name="course"
+                control={control}
+                render={({ field }) => (
+                  <Select
+                    {...field}
+                    error={!!errors.course}
+                    labelId="demo-simple-select-label"
+                    id="course"
+                    label="Course"
+                  >
+                    {data?.courses?.map((c, index) => {
+                      return (
+                        <MenuItem key={index} value={c}>
+                          {c}
+                        </MenuItem>
+                      );
+                    })}
+                  </Select>
+                )}
               />
-            </Button>
-            {file.length >= 1 && (
-              <Typography>{file.length} Files Added</Typography>
+            </FormControl>
+            <Box>
+              <Button
+                component="label"
+                role={undefined}
+                variant="contained"
+                tabIndex={-1}
+                startIcon={<Cloud />}
+              >
+                Upload files
+                <VisuallyHiddenInput
+                  onChange={(e) => {
+                    setFile(e.target.files);
+                  }}
+                  error={!!errors.file}
+                  type="file"
+                  multiple
+                  id="file"
+                />
+              </Button>
+            </Box>
+            {file?.length >= 1 ? (
+              <Typography>{file?.length} File Added</Typography>
+            ) : (
+              <Typography color={"red"}>Please Add File</Typography>
             )}
-            <MainButton
-              title={"+ Add Assignment"}
-              onclick={addAssignmentsHandler}
-            />
-          </Container>
+
+            <SubmitButton title={"+ Add Assignment"} />
+          </Box>
         </AdminLayout>
       )}
     </>

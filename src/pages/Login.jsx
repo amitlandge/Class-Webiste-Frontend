@@ -22,8 +22,8 @@ const Login = () => {
   const { isLogin } = useSelector((state) => state.auth);
   const { mutate, isPending, data } = useMutation({
     mutationFn: postDataHandler,
-    onSuccess: () => {
-      dispatch(isAuthenticated(data?.data?.user));
+    onSuccess: (data) => {
+      dispatch(isAuthenticated(data?.user));
       toast("Login Successfully");
       navigate("/");
     },
@@ -42,9 +42,10 @@ const Login = () => {
   });
 
   const onLoginHandler = async (logData) => {
+    console.log(logData);
     mutate({ url: "api/v1/user/login", eventData: logData });
   };
-  console.log(data?.user);
+
   const changeFormHandler = () => {
     setIsLogin((prev) => !prev);
   };

@@ -1,5 +1,6 @@
 import { Grid, IconButton, Menu } from "@mui/material";
 import Sidebar from "../Admin/Sidebar";
+import Grid2 from "@mui/material/Unstable_Grid2";
 
 const AdminLayout = (prop) => {
   const { children } = prop;
@@ -22,8 +23,17 @@ const AdminLayout = (prop) => {
         position: "relative",
       }}
     >
-      <Grid container height={"auto"}>
-        <Grid
+      <Grid2
+        container
+        height={"auto"}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        <Grid2
           item
           lg={12}
           md={12}
@@ -35,11 +45,11 @@ const AdminLayout = (prop) => {
           }}
         >
           <Sidebar />
-        </Grid>
-        <Grid item lg={12} padding={"2%"}>
+        </Grid2>
+        <Grid2 item lg={12} md={12} sm={12} padding={"2%"}>
           {children}
-        </Grid>
-      </Grid>
+        </Grid2>
+      </Grid2>
       {menuIcon}
     </div>
   );

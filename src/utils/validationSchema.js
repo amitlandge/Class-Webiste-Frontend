@@ -44,3 +44,29 @@ export const enrollValidation = Yup.object().shape({
       return value && value && ["image/jpeg", "image/png"].includes(value.type);
     }),
 });
+
+export const assignmentValidation = Yup.object().shape({
+  title: Yup.string()
+    .min(3, "Title must be at least 3 characters")
+    .required("Title is required"),
+  note: Yup.string()
+    .min(5, "Note must be at least 10 characters")
+    .required("Note is required"),
+  course: Yup.string()
+    .min(3, "Course must be at least 3 characters")
+    .required("Course is required"),
+});
+export const courseValidation = Yup.object().shape({
+  title: Yup.string()
+    .min(3, "Title must be at least 3 characters")
+    .required("Title is required"),
+  description: Yup.string()
+    .min(5, "Description must be at least 10 characters")
+    .required("Description is required"),
+  subjects: Yup.string()
+    .min(3, "Subject must be at least 3 characters")
+    .required("Subject is required"),
+  topic: Yup.string()
+    .min(3, "Topic must be at least 3 characters")
+    .required("Topic is required"),
+});

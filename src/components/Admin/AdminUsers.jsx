@@ -1,10 +1,13 @@
 import AdminLayout from "./AdminLayout";
 import Table from "../Table/Table.jsx";
-import { useGetData } from "../../hooks/useGetData.js";
+
 import moment from "moment";
-import { useEffect, useMemo } from "react";
+
 import { setAdminUsers } from "../../redux/reducers/admin.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { fetchData } from "../../utils/fetchData.js";
+import { toast } from "react-toastify";
 const AdminUsers = () => {
   const column = [
     {
@@ -34,21 +37,28 @@ const AdminUsers = () => {
       width: "280",
     },
   ];
-  const [data] = useGetData("api/v1/user/getAllUsers");
-  const { users } = useSelector((state) => state.admin);
+
   const dispatch = useDispatch();
-  useEffect(() => {
-    if (data?.users) {
-      dispatch(setAdminUsers(data?.users));
-    }
-  }, [data, dispatch]);
-  const filteredArray = useMemo(() => {
-    return users?.map((user) => ({
+
+  const { data } = useQuery({
+    queryKey: ["allUsers", "api/v1/user/getAllUsers"], // Unique key for caching
+    queryFn: fetchData,
+    onError: (error) => {
+      toast.error(`Error: ${error.message}`);
+    },
+    onSuccess: () => {
+      console.log(data);
+      dispatch(setAdminUsers(data?.users)); // Save data to redux store
+    },
+  });
+
+  const filteredArray = data?.users?.map((user) => {
+    return {
       ...user,
       id: user._id,
       updated: moment(user?.createdAt).format("YYYY-MM-DD"),
-    }));
-  }, [users]);
+    };
+  });
 
   return (
     <AdminLayout>
