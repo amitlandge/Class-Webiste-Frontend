@@ -9,9 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { useState } from "react";
-import MainButton from "../../UI/MainButton";
-import { toast } from "react-toastify";
-import { usePostUpdate } from "../../hooks/usePostUpdate";
+
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import AdminLayout from "./AdminLayout";
@@ -19,6 +17,9 @@ import { useForm, Controller } from "react-hook-form";
 import { yupResolver } from "@hookform/resolvers/yup";
 import { courseValidation } from "../../utils/validationSchema";
 import SubmitButton from "../../UI/SubmitButton";
+import { toast } from "react-toastify";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../../utils/postData";
 
 const AddCourses = () => {
   const VisuallyHiddenInput = styled("input")({
@@ -34,7 +35,7 @@ const AddCourses = () => {
   });
 
   const [file, setFile] = useState();
-  const [loader, putPostmethod] = usePostUpdate();
+
   const navigate = useNavigate();
   const {
     control,
@@ -42,6 +43,16 @@ const AddCourses = () => {
     formState: { errors },
   } = useForm({
     resolver: yupResolver(courseValidation),
+  });
+  const { mutate, isPending } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      toast("Create Course Successfully");
+      navigate("/admin/courses");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+    },
   });
   const addCourseHandler = async (courseData) => {
     console.log("Enter");
@@ -53,28 +64,17 @@ const AddCourses = () => {
     formData.append("description", courseData.description);
     formData.append("topic", courseData.topic);
     formData.append("image", file);
-    const data = {
-      method: "POST",
+    mutate({
       url: "api/v1/course/create-course",
-      payload: formData,
-      message: "Create Course Successfully",
+      eventData: formData,
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    };
-    try {
-      const response = await putPostmethod(data);
-
-      if (response?.status === 200) {
-        navigate("/admin/courses");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <AdminLayout>

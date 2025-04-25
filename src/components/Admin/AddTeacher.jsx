@@ -2,12 +2,18 @@ import styled from "@emotion/styled";
 import { Cloud } from "@mui/icons-material";
 import { Button, Container, Grid, TextField, Typography } from "@mui/material";
 import { useState } from "react";
-import MainButton from "../../UI/MainButton";
+
 import { toast } from "react-toastify";
 import { usePostUpdate } from "../../hooks/usePostUpdate";
 import { useNavigate } from "react-router-dom";
 import Spinner from "../../UI/Spinner";
 import AdminLayout from "./AdminLayout";
+import { Controller, useForm } from "react-hook-form";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { addTeacherValidation } from "../../utils/validationSchema";
+import SubmitButton from "../../UI/SubmitButton";
+import { useMutation } from "@tanstack/react-query";
+import { postDataHandler } from "../../utils/postData";
 
 const AddTeacher = () => {
   const VisuallyHiddenInput = styled("input")({
@@ -21,47 +27,44 @@ const AddTeacher = () => {
     whiteSpace: "nowrap",
     width: 1,
   });
-  const [name, setName] = useState("");
-  const [subjects, setSubjects] = useState("");
-  const [bio, setBio] = useState("");
 
   const [file, setFile] = useState();
-  const [loader, putPostmethod] = usePostUpdate();
-  const navigate = useNavigate();
 
-  const addTeacherHandler = async () => {
-    if (!name && !subjects && !bio && !file) {
-      toast.error("Please Fill All Information");
-      return;
-    }
- 
+  const navigate = useNavigate();
+  const {
+    control,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: yupResolver(addTeacherValidation),
+  });
+  const { mutate, isPending } = useMutation({
+    mutationFn: postDataHandler,
+    onSuccess: () => {
+      toast("Create Teacher Successfully");
+      navigate("/admin/teachers");
+    },
+    onError: (error) => {
+      toast.error(error?.info?.message);
+    },
+  });
+  const addTeacherHandler = async (addTeacherData) => {
     let formData = new FormData();
-    formData.append("name", name);
-    formData.append("subjects", subjects);
-    formData.append("bio", bio);
+    formData.append("name", addTeacherData.name);
+    formData.append("subjects", addTeacherData.subjects);
+    formData.append("bio", addTeacherData.bio);
     formData.append("avatar", file);
-    const data = {
-      method: "POST",
+    mutate({
       url: "api/v1/teacher/add-teacher",
-      payload: formData,
-      message: "Add Teacher Successfully",
+      eventData: formData,
       headers: {
         "Content-Type": "multipart/form-data",
       },
-    };
-    try {
-      const response = await putPostmethod(data);
-      console.log(response);
-      if (response?.status === 200) {
-        navigate("/admin/teachers");
-      }
-    } catch (error) {
-      console.log(error);
-    }
+    });
   };
   return (
     <>
-      {loader ? (
+      {isPending ? (
         <Spinner />
       ) : (
         <AdminLayout>
@@ -74,6 +77,8 @@ const AddTeacher = () => {
               Add Teacher
             </Typography>
             <Grid
+              component={"form"}
+              onSubmit={handleSubmit(addTeacherHandler)}
               sx={{
                 display: "flex",
                 flexDirection: "column",
@@ -83,42 +88,54 @@ const AddTeacher = () => {
               }}
             >
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Name"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setName(e.target.value);
-                  }}
-                  value={name}
+                <Controller
+                  control={control}
+                  name="name"
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      error={!!errors.name}
+                      helperText={errors.name?.message}
+                      label="Name"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Subjects"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setSubjects(e.target.value);
-                  }}
-                  value={subjects}
+                <Controller
+                  name="subjects"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      {...field}
+                      fullWidth
+                      error={!!errors.subjects}
+                      helperText={errors.subjects?.message}
+                      label="Subjects"
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
               <Grid item>
-                <TextField
-                  fullWidth
-                  id="outlined-basic"
-                  label="Bio"
-                  variant="outlined"
-                  type="text"
-                  onChange={(e) => {
-                    setBio(e.target.value);
-                  }}
-                  value={bio}
+                <Controller
+                  name="bio"
+                  control={control}
+                  render={({ field }) => (
+                    <TextField
+                      fullWidth
+                      {...field}
+                      label="Bio"
+                      error={!!errors.bio}
+                      helperText={errors.bio?.message}
+                      variant="outlined"
+                      type="text"
+                    />
+                  )}
                 />
               </Grid>
 
@@ -158,7 +175,7 @@ const AddTeacher = () => {
                 </Grid>
               )}
               <Grid item>
-                <MainButton title={"Add Teacher"} onclick={addTeacherHandler} />
+                <SubmitButton title={"+ Add Teacher"} />
               </Grid>
             </Grid>
           </Container>
