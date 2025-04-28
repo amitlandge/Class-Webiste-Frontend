@@ -81,3 +81,14 @@ export const addTeacherValidation = Yup.object().shape({
     .min(3, "Subject must be at least 3 characters")
     .required("Subject is required"),
 });
+export const createLectureValidation = Yup.object().shape({
+  title: Yup.string()
+    .min(3, "Title must be at least 3 characters")
+    .required("Title is required"),
+  course: Yup.string()
+    .min(2, "Course must be at least 2 characters")
+    .required("Course is required"),
+  subject: Yup.string()
+    .min(3, "Subject must be at least 3 characters")
+    .required("Subject is required"),
+});
