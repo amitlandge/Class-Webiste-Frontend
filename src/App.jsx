@@ -9,6 +9,7 @@ import { lazy, Suspense, useEffect } from "react";
 import { SocketProvider } from "./context/socketContext.jsx";
 
 import ScrollToTop from "./utils/ScrollToTop.js";
+import AskDoubt from "./pages/Student/AskDoubt.jsx";
 
 const AdminLectures = lazy(() =>
   import("./components/Admin/AdminLectures.jsx")
@@ -142,6 +143,7 @@ function App() {
               <Route path="/lectures" element={<Lectures />} />
               <Route path="/view/attendance" element={<ViewAttendance />} />
               <Route path="/attendance" element={<Attendance />} />
+              <Route path="/ask" element={<AskDoubt />} />
             </Route>
             <Route path="/course/details/:cid" element={<CourseDetails />} />
             <Route path="/login" element={<Login />} />

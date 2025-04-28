@@ -27,6 +27,7 @@ import {
   RecordVoiceOver,
   Send,
   Book,
+  RecordVoiceOverRounded,
 } from "@mui/icons-material";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, useNavigate } from "react-router-dom";
@@ -123,6 +124,17 @@ const Navbar = () => {
 
                 <Link to={"/attendance"} onClick={oncloseMenubar}>
                   Attendance
+                </Link>
+              </ListItemButton>
+            )}
+            {enrollDetails && enrollDetails?.request === "Accepted" && (
+              <ListItemButton>
+                <ListItemIcon>
+                  <RecordVoiceOverRounded />
+                </ListItemIcon>
+
+                <Link to={"/ask"} onClick={oncloseMenubar}>
+                  Ask Your Doubt
                 </Link>
               </ListItemButton>
             )}
